@@ -98,7 +98,7 @@ public class Event implements Serializable {
 
     @Override
     public String toString() {
-        return "BCMS.entity.Event[ eventName=" + eventName + " ]";
+        return "com.java.BCMS.entity.Event[ eventName=" + eventName + " ]";
     }
     
 }

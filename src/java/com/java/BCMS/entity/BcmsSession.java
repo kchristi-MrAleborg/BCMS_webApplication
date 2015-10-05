@@ -8,14 +8,12 @@ package com.java.BCMS.entity;
 import java.io.Serializable;
 import java.util.Collection;
 import javax.persistence.Basic;
-import javax.persistence.CascadeType;
 import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.Id;
 import javax.persistence.NamedQueries;
 import javax.persistence.NamedQuery;
 import javax.persistence.OneToMany;
-import javax.persistence.OneToOne;
 import javax.persistence.Table;
 import javax.validation.constraints.NotNull;
 import javax.validation.constraints.Size;
@@ -40,10 +38,6 @@ public class BcmsSession implements Serializable {
     @Size(min = 1, max = 30)
     @Column(name = "SESSION_ID")
     private String sessionId;
-    @OneToOne(cascade = CascadeType.ALL, mappedBy = "bcmsSession")
-    private BcmsSessionFireTruck bcmsSessionFireTruck;
-    @OneToOne(cascade = CascadeType.ALL, mappedBy = "bcmsSession")
-    private BcmsSessionPoliceVehicle bcmsSessionPoliceVehicle;
     @OneToMany(mappedBy = "sessionId")
     private Collection<Event> eventCollection;
 
@@ -60,22 +54,6 @@ public class BcmsSession implements Serializable {
 
     public void setSessionId(String sessionId) {
         this.sessionId = sessionId;
-    }
-
-    public BcmsSessionFireTruck getBcmsSessionFireTruck() {
-        return bcmsSessionFireTruck;
-    }
-
-    public void setBcmsSessionFireTruck(BcmsSessionFireTruck bcmsSessionFireTruck) {
-        this.bcmsSessionFireTruck = bcmsSessionFireTruck;
-    }
-
-    public BcmsSessionPoliceVehicle getBcmsSessionPoliceVehicle() {
-        return bcmsSessionPoliceVehicle;
-    }
-
-    public void setBcmsSessionPoliceVehicle(BcmsSessionPoliceVehicle bcmsSessionPoliceVehicle) {
-        this.bcmsSessionPoliceVehicle = bcmsSessionPoliceVehicle;
     }
 
     @XmlTransient
@@ -109,7 +87,7 @@ public class BcmsSession implements Serializable {
 
     @Override
     public String toString() {
-        return "BCMS.entity.BcmsSession[ sessionId=" + sessionId + " ]";
+        return "com.java.BCMS.entity.BcmsSession[ sessionId=" + sessionId + " ]";
     }
     
 }
