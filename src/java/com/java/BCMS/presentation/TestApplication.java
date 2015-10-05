@@ -35,7 +35,7 @@ public class TestApplication {
             fsc_bCMS.state_fire_truck_number(2);
             psc_bCMS.state_police_vehicle_number(2);
 
-            psc_bCMS.route_for_police_vehicles();
+            psc_bCMS.route_for_police_vehicles("R3");
             Thread.sleep(100);
             /**
              * Bug due to PlantUML modeling style. One must await so that
