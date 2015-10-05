@@ -42,9 +42,9 @@ public class TestApplication {
              * 'route_for_police_vehicles' that is re-sent internally, arrives
              * before what follows:
              */
-            fsc_bCMS.route_for_fire_trucks();
+            fsc_bCMS.route_for_fire_trucks("R1");
             fsc_bCMS.FSC_disagrees_about_fire_truck_route();
-            fsc_bCMS.route_for_fire_trucks();
+            fsc_bCMS.route_for_fire_trucks("R2");
             fsc_bCMS.FSC_agrees_about_police_vehicle_route();
             fsc_bCMS.FSC_agrees_about_fire_truck_route();
             Thread.sleep(100);

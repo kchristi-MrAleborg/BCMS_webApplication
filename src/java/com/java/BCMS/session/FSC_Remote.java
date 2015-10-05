@@ -16,7 +16,7 @@ import com.pauware.pauware_engine._Exception.Statechart_exception;
 public interface FSC_Remote extends BCMSLocal{
     void FSC_connection_request() throws Statechart_exception;
     void state_fire_truck_number(int number_of_fire_truck_required) throws Statechart_exception;
-    void route_for_fire_trucks() throws Statechart_exception;
+    void route_for_fire_trucks(String route_name) throws Statechart_exception;
     void FSC_agrees_about_fire_truck_route() throws Statechart_exception;
     void FSC_agrees_about_police_vehicle_route() throws Statechart_exception;
     void FSC_disagrees_about_fire_truck_route() throws Statechart_exception;

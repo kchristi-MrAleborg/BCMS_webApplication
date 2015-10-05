@@ -140,6 +140,9 @@ public class BCMS extends Timer_monitor implements FSC_Remote, PSC_Remote {
     protected AbstractStatechart _Completion_of_objectives;
     protected AbstractStatechart _End_of_crisis;
     protected AbstractStatechart_monitor _bCMS_state_machine;
+    
+    
+    private com.java.BCMS.entity.Route _last_fire_truck_route;
 
 // Statechart initialization:
     private void init_structure() throws Statechart_exception {
@@ -432,8 +435,16 @@ public class BCMS extends Timer_monitor implements FSC_Remote, PSC_Remote {
     }
 
     @Override
-    public void route_for_fire_trucks() throws Statechart_exception {
-        _bCMS_state_machine.run_to_completion(_Route_for_fire_trucks);
+    public void route_for_fire_trucks(String route_name) throws Statechart_exception {
+        //_bCMS_state_machine.run_to_completion(_Route_for_fire_trucks);
+        
+        _last_fire_truck_route = null;
+        _last_fire_truck_route = _entity_manager.find(com.java.BCMS.entity.Route.class ,new com.java.BCMS.entity.Route(route_name)); // On construit un entity bean 'Route' avec sa clef 'route_name' ; on le cherche dans la base...
+        if (_last_fire_truck_route != null) {
+            _bCMS_state_machine.run_to_completion(_Route_for_fire_trucks);
+        } else {
+            throw new Statechart_exception("Fire truck route " + route_name + " does not exist...");
+        }
         
         this.insertEvent(_Route_for_fire_trucks, this._bCMS_state_machine.current_state());
     }
