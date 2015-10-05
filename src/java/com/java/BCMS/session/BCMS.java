@@ -440,7 +440,7 @@ public class BCMS extends Timer_monitor implements FSC_Remote, PSC_Remote {
         //_bCMS_state_machine.run_to_completion(_Route_for_fire_trucks);
         
         _last_fire_truck_route = null;
-        _last_fire_truck_route = _entity_manager.find(com.java.BCMS.entity.Route.class ,new com.java.BCMS.entity.Route(route_name)); // On construit un entity bean 'Route' avec sa clef 'route_name' ; on le cherche dans la base...
+        _last_fire_truck_route = _entity_manager.find(com.java.BCMS.entity.Route.class, route_name); // On construit un entity bean 'Route' avec sa clef 'route_name' ; on le cherche dans la base...
         if (_last_fire_truck_route != null) {
             System.out.println("LAST FIRETRUCKS ROUTE : " + route_name);
             _bCMS_state_machine.run_to_completion(_Route_for_fire_trucks);
@@ -456,7 +456,7 @@ public class BCMS extends Timer_monitor implements FSC_Remote, PSC_Remote {
         //_bCMS_state_machine.run_to_completion(_Route_for_police_vehicles);
         
          _last_police_vehicle_route = null;
-        _last_police_vehicle_route = _entity_manager.find(com.java.BCMS.entity.Route.class ,new com.java.BCMS.entity.Route(route_name)); // On construit un entity bean 'Route' avec sa clef 'route_name' ; on le cherche dans la base...
+        _last_police_vehicle_route = _entity_manager.find(com.java.BCMS.entity.Route.class, route_name); // On construit un entity bean 'Route' avec sa clef 'route_name' ; on le cherche dans la base...
         if (_last_police_vehicle_route != null) {
             _bCMS_state_machine.run_to_completion(_Route_for_police_vehicles);
         } else {
