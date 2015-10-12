@@ -866,7 +866,10 @@ public class BCMS extends Timer_monitor implements FSC_Remote, PSC_Remote {
     }
     
     private void insertEvent (final String name, final String trace){
-        com.java.BCMS.entity.Event event = new com.java.BCMS.entity.Event(name);
+        java.text.DateFormat format = new java.text.SimpleDateFormat("yyyy/MM/dd HH:mm:ss");
+        java.util.Date date = new java.util.Date();
+        
+        com.java.BCMS.entity.Event event = new com.java.BCMS.entity.Event(new com.java.BCMS.entity.EventPK(name, (format.format(date)).toString()));
         event.setSessionId(this._bcmsSession);
         event.setExecutionTrace(trace);
         this._entity_manager.persist(event);

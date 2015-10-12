@@ -6,16 +6,14 @@
 package com.java.BCMS.entity;
 
 import java.io.Serializable;
-import javax.persistence.Basic;
 import javax.persistence.Column;
+import javax.persistence.EmbeddedId;
 import javax.persistence.Entity;
-import javax.persistence.Id;
 import javax.persistence.JoinColumn;
 import javax.persistence.ManyToOne;
 import javax.persistence.NamedQueries;
 import javax.persistence.NamedQuery;
 import javax.persistence.Table;
-import javax.validation.constraints.NotNull;
 import javax.validation.constraints.Size;
 import javax.xml.bind.annotation.XmlRootElement;
 
@@ -28,16 +26,13 @@ import javax.xml.bind.annotation.XmlRootElement;
 @XmlRootElement
 @NamedQueries({
     @NamedQuery(name = "Event.findAll", query = "SELECT e FROM Event e"),
-    @NamedQuery(name = "Event.findByEventName", query = "SELECT e FROM Event e WHERE e.eventName = :eventName"),
+    @NamedQuery(name = "Event.findByEventName", query = "SELECT e FROM Event e WHERE e.eventPK.eventName = :eventName"),
+    @NamedQuery(name = "Event.findByEventTime", query = "SELECT e FROM Event e WHERE e.eventPK.eventTime = :eventTime"),
     @NamedQuery(name = "Event.findByExecutionTrace", query = "SELECT e FROM Event e WHERE e.executionTrace = :executionTrace")})
 public class Event implements Serializable {
     private static final long serialVersionUID = 1L;
-    @Id
-    @Basic(optional = false)
-    @NotNull
-    @Size(min = 1, max = 50)
-    @Column(name = "EVENT_NAME")
-    private String eventName;
+    @EmbeddedId
+    protected EventPK eventPK;
     @Size(max = 500)
     @Column(name = "EXECUTION_TRACE")
     private String executionTrace;
@@ -48,16 +43,20 @@ public class Event implements Serializable {
     public Event() {
     }
 
-    public Event(String eventName) {
-        this.eventName = eventName;
+    public Event(EventPK eventPK) {
+        this.eventPK = eventPK;
     }
 
-    public String getEventName() {
-        return eventName;
+    public Event(String eventName, String eventTime) {
+        this.eventPK = new EventPK(eventName, eventTime);
     }
 
-    public void setEventName(String eventName) {
-        this.eventName = eventName;
+    public EventPK getEventPK() {
+        return eventPK;
+    }
+
+    public void setEventPK(EventPK eventPK) {
+        this.eventPK = eventPK;
     }
 
     public String getExecutionTrace() {
@@ -79,7 +78,7 @@ public class Event implements Serializable {
     @Override
     public int hashCode() {
         int hash = 0;
-        hash += (eventName != null ? eventName.hashCode() : 0);
+        hash += (eventPK != null ? eventPK.hashCode() : 0);
         return hash;
     }
 
@@ -90,7 +89,7 @@ public class Event implements Serializable {
             return false;
         }
         Event other = (Event) object;
-        if ((this.eventName == null && other.eventName != null) || (this.eventName != null && !this.eventName.equals(other.eventName))) {
+        if ((this.eventPK == null && other.eventPK != null) || (this.eventPK != null && !this.eventPK.equals(other.eventPK))) {
             return false;
         }
         return true;
@@ -98,7 +97,7 @@ public class Event implements Serializable {
 
     @Override
     public String toString() {
-        return "com.java.BCMS.entity.Event[ eventName=" + eventName + " ]";
+        return "com.java.BCMS.entity.Event[ eventPK=" + eventPK + " ]";
     }
     
 }
