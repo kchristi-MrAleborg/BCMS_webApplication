@@ -8,6 +8,7 @@ package com.java.BCMS.entity;
 import java.io.Serializable;
 import java.util.Collection;
 import javax.persistence.Basic;
+import javax.persistence.CascadeType;
 import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.Id;
@@ -38,6 +39,10 @@ public class BcmsSession implements Serializable {
     @Size(min = 1, max = 30)
     @Column(name = "SESSION_ID")
     private String sessionId;
+    @OneToMany(cascade = CascadeType.ALL, mappedBy = "bcmsSession")
+    private Collection<BcmsSessionFireTruck> bcmsSessionFireTruckCollection;
+    @OneToMany(cascade = CascadeType.ALL, mappedBy = "bcmsSession")
+    private Collection<BcmsSessionPoliceVehicle> bcmsSessionPoliceVehicleCollection;
     @OneToMany(mappedBy = "sessionId")
     private Collection<Event> eventCollection;
 
@@ -54,6 +59,24 @@ public class BcmsSession implements Serializable {
 
     public void setSessionId(String sessionId) {
         this.sessionId = sessionId;
+    }
+
+    @XmlTransient
+    public Collection<BcmsSessionFireTruck> getBcmsSessionFireTruckCollection() {
+        return bcmsSessionFireTruckCollection;
+    }
+
+    public void setBcmsSessionFireTruckCollection(Collection<BcmsSessionFireTruck> bcmsSessionFireTruckCollection) {
+        this.bcmsSessionFireTruckCollection = bcmsSessionFireTruckCollection;
+    }
+
+    @XmlTransient
+    public Collection<BcmsSessionPoliceVehicle> getBcmsSessionPoliceVehicleCollection() {
+        return bcmsSessionPoliceVehicleCollection;
+    }
+
+    public void setBcmsSessionPoliceVehicleCollection(Collection<BcmsSessionPoliceVehicle> bcmsSessionPoliceVehicleCollection) {
+        this.bcmsSessionPoliceVehicleCollection = bcmsSessionPoliceVehicleCollection;
     }
 
     @XmlTransient

@@ -73,7 +73,7 @@ public class Route implements Serializable {
 
     @Override
     public String toString() {
-        return "BCMS.entity.Route[ routeName=" + routeName + " ]";
+        return "com.java.BCMS.entity.Route[ routeName=" + routeName + " ]";
     }
     
 }

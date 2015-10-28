@@ -8,6 +8,7 @@ package com.java.BCMS.entity;
 import java.io.Serializable;
 import java.util.Collection;
 import javax.persistence.Basic;
+import javax.persistence.CascadeType;
 import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.Id;
@@ -38,7 +39,7 @@ public class FireTruck implements Serializable {
     @Size(min = 1, max = 30)
     @Column(name = "FIRE_TRUCK_NAME")
     private String fireTruckName;
-    @OneToMany(mappedBy = "fireTruckName")
+    @OneToMany(cascade = CascadeType.ALL, mappedBy = "fireTruck")
     private Collection<BcmsSessionFireTruck> bcmsSessionFireTruckCollection;
 
     public FireTruck() {
@@ -87,7 +88,7 @@ public class FireTruck implements Serializable {
 
     @Override
     public String toString() {
-        return "BCMS.entity.FireTruck[ fireTruckName=" + fireTruckName + " ]";
+        return "com.java.BCMS.entity.FireTruck[ fireTruckName=" + fireTruckName + " ]";
     }
     
 }

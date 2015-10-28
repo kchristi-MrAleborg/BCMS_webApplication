@@ -849,7 +849,7 @@ public class BCMS extends Timer_monitor implements FSC_Remote, PSC_Remote {
     public void reset() throws Statechart_exception {
         _bCMS_state_machine.to_state(_Init.name());        
         
-        setSession();
+        this.setSession();
     }
     
     
@@ -885,42 +885,51 @@ public class BCMS extends Timer_monitor implements FSC_Remote, PSC_Remote {
     }
     
     private void insertFireTruck(final String name){
-        com.java.BCMS.entity.BcmsSessionFireTruck fireTruck = new com.java.BCMS.entity.BcmsSessionFireTruck(_sessionId);
+        this._entity_manager.getTransaction().begin();
+        com.java.BCMS.entity.BcmsSessionFireTruck fireTruck = new com.java.BCMS.entity.BcmsSessionFireTruck(_sessionId, name);
         fireTruck.setBcmsSession(_bcmsSession);
-        fireTruck.setFireTruckName(this._entity_manager.find(com.java.BCMS.entity.FireTruck.class, name));
         fireTruck.setFireTruckStatus(vehicleState.Dispatched.toString());
         
         this._entity_manager.persist(fireTruck);
+        this._entity_manager.getTransaction().commit();
     }
     
     private void insertPoliceVehicle(final String name){
-        com.java.BCMS.entity.BcmsSessionPoliceVehicle policeVehicle = new com.java.BCMS.entity.BcmsSessionPoliceVehicle(_sessionId);
+        this._entity_manager.getTransaction().begin();
+        com.java.BCMS.entity.BcmsSessionPoliceVehicle policeVehicle = new com.java.BCMS.entity.BcmsSessionPoliceVehicle(_sessionId, name);
         policeVehicle.setBcmsSession(_bcmsSession);
-        policeVehicle.setPoliceVehicleName(this._entity_manager.find(com.java.BCMS.entity.PoliceVehicle.class, name));
         policeVehicle.setPoliceVehicleStatus(vehicleState.Dispatched.toString());
         
         this._entity_manager.persist(policeVehicle);
+        this._entity_manager.getTransaction().commit();
     }
+ 
     
-
     public void updateFireTruckStatus(final String name,final String status){
+        this._entity_manager.getTransaction().begin();
         com.java.BCMS.entity.BcmsSessionFireTruck fireTruck = this._entity_manager.find(com.java.BCMS.entity.BcmsSessionFireTruck.class,name);
         fireTruck.setFireTruckStatus(status);
         this._entity_manager.merge(fireTruck);
+        this._entity_manager.getTransaction().commit();
     }
     
     public void updatePoliceVehicleStatus(final String name,final String status){
+        this._entity_manager.getTransaction().begin();
         com.java.BCMS.entity.BcmsSessionPoliceVehicle policeVehicle = this._entity_manager.find(com.java.BCMS.entity.BcmsSessionPoliceVehicle.class,name);
         policeVehicle.setPoliceVehicleStatus(status);
         this._entity_manager.merge(policeVehicle);
+        this._entity_manager.getTransaction().commit();
     }
     
     private void insertSession(final String id){
+        //this._entity_manager.getTransaction().begin();
         this._bcmsSession = new com.java.BCMS.entity.BcmsSession(id);
         this._entity_manager.persist(this._bcmsSession);
+        //this._entity_manager.getTransaction().commit();
     }
     
     private void insertEvent (final String name, final String trace){
+        //this._entity_manager.getTransaction().begin();
         java.text.DateFormat format = new java.text.SimpleDateFormat("yyyy/MM/dd HH:mm:ss:SSS");
         java.util.Date date = new java.util.Date();
         
@@ -928,6 +937,7 @@ public class BCMS extends Timer_monitor implements FSC_Remote, PSC_Remote {
         event.setSessionId(this._bcmsSession);
         event.setExecutionTrace(trace);
         this._entity_manager.persist(event);
+        //this._entity_manager.getTransaction().commit();
     }
     
     public enum vehicleState{ Idle, Dispatched, Arrived, Blocked, Breakdown }

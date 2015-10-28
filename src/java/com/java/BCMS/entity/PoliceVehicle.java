@@ -8,6 +8,7 @@ package com.java.BCMS.entity;
 import java.io.Serializable;
 import java.util.Collection;
 import javax.persistence.Basic;
+import javax.persistence.CascadeType;
 import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.Id;
@@ -38,7 +39,7 @@ public class PoliceVehicle implements Serializable {
     @Size(min = 1, max = 30)
     @Column(name = "POLICE_VEHICLE_NAME")
     private String policeVehicleName;
-    @OneToMany(mappedBy = "policeVehicleName")
+    @OneToMany(cascade = CascadeType.ALL, mappedBy = "policeVehicle")
     private Collection<BcmsSessionPoliceVehicle> bcmsSessionPoliceVehicleCollection;
 
     public PoliceVehicle() {
@@ -87,7 +88,7 @@ public class PoliceVehicle implements Serializable {
 
     @Override
     public String toString() {
-        return "BCMS.entity.PoliceVehicle[ policeVehicleName=" + policeVehicleName + " ]";
+        return "com.java.BCMS.entity.PoliceVehicle[ policeVehicleName=" + policeVehicleName + " ]";
     }
     
 }

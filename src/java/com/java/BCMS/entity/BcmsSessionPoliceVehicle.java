@@ -6,17 +6,14 @@
 package com.java.BCMS.entity;
 
 import java.io.Serializable;
-import javax.persistence.Basic;
 import javax.persistence.Column;
+import javax.persistence.EmbeddedId;
 import javax.persistence.Entity;
-import javax.persistence.Id;
 import javax.persistence.JoinColumn;
 import javax.persistence.ManyToOne;
 import javax.persistence.NamedQueries;
 import javax.persistence.NamedQuery;
-import javax.persistence.OneToOne;
 import javax.persistence.Table;
-import javax.validation.constraints.NotNull;
 import javax.validation.constraints.Size;
 import javax.xml.bind.annotation.XmlRootElement;
 
@@ -29,39 +26,40 @@ import javax.xml.bind.annotation.XmlRootElement;
 @XmlRootElement
 @NamedQueries({
     @NamedQuery(name = "BcmsSessionPoliceVehicle.findAll", query = "SELECT b FROM BcmsSessionPoliceVehicle b"),
-    @NamedQuery(name = "BcmsSessionPoliceVehicle.findBySessionId", query = "SELECT b FROM BcmsSessionPoliceVehicle b WHERE b.sessionId = :sessionId"),
+    @NamedQuery(name = "BcmsSessionPoliceVehicle.findBySessionId", query = "SELECT b FROM BcmsSessionPoliceVehicle b WHERE b.bcmsSessionPoliceVehiclePK.sessionId = :sessionId"),
+    @NamedQuery(name = "BcmsSessionPoliceVehicle.findByPoliceVehicleName", query = "SELECT b FROM BcmsSessionPoliceVehicle b WHERE b.bcmsSessionPoliceVehiclePK.policeVehicleName = :policeVehicleName"),
     @NamedQuery(name = "BcmsSessionPoliceVehicle.findByPoliceVehicleStatus", query = "SELECT b FROM BcmsSessionPoliceVehicle b WHERE b.policeVehicleStatus = :policeVehicleStatus")})
 public class BcmsSessionPoliceVehicle implements Serializable {
     private static final long serialVersionUID = 1L;
-    @Id
-    @Basic(optional = false)
-    @NotNull
-    @Size(min = 1, max = 30)
-    @Column(name = "SESSION_ID")
-    private String sessionId;
+    @EmbeddedId
+    protected BcmsSessionPoliceVehiclePK bcmsSessionPoliceVehiclePK;
     @Size(max = 10)
     @Column(name = "POLICE_VEHICLE_STATUS")
     private String policeVehicleStatus;
     @JoinColumn(name = "SESSION_ID", referencedColumnName = "SESSION_ID", insertable = false, updatable = false)
-    @OneToOne(optional = false)
+    @ManyToOne(optional = false)
     private BcmsSession bcmsSession;
-    @JoinColumn(name = "POLICE_VEHICLE_NAME", referencedColumnName = "POLICE_VEHICLE_NAME")
-    @ManyToOne
-    private PoliceVehicle policeVehicleName;
+    @JoinColumn(name = "POLICE_VEHICLE_NAME", referencedColumnName = "POLICE_VEHICLE_NAME", insertable = false, updatable = false)
+    @ManyToOne(optional = false)
+    private PoliceVehicle policeVehicle;
 
     public BcmsSessionPoliceVehicle() {
     }
 
-    public BcmsSessionPoliceVehicle(String sessionId) {
-        this.sessionId = sessionId;
+    public BcmsSessionPoliceVehicle(BcmsSessionPoliceVehiclePK bcmsSessionPoliceVehiclePK) {
+        this.bcmsSessionPoliceVehiclePK = bcmsSessionPoliceVehiclePK;
     }
 
-    public String getSessionId() {
-        return sessionId;
+    public BcmsSessionPoliceVehicle(String sessionId, String policeVehicleName) {
+        this.bcmsSessionPoliceVehiclePK = new BcmsSessionPoliceVehiclePK(sessionId, policeVehicleName);
     }
 
-    public void setSessionId(String sessionId) {
-        this.sessionId = sessionId;
+    public BcmsSessionPoliceVehiclePK getBcmsSessionPoliceVehiclePK() {
+        return bcmsSessionPoliceVehiclePK;
+    }
+
+    public void setBcmsSessionPoliceVehiclePK(BcmsSessionPoliceVehiclePK bcmsSessionPoliceVehiclePK) {
+        this.bcmsSessionPoliceVehiclePK = bcmsSessionPoliceVehiclePK;
     }
 
     public String getPoliceVehicleStatus() {
@@ -80,18 +78,18 @@ public class BcmsSessionPoliceVehicle implements Serializable {
         this.bcmsSession = bcmsSession;
     }
 
-    public PoliceVehicle getPoliceVehicleName() {
-        return policeVehicleName;
+    public PoliceVehicle getPoliceVehicle() {
+        return policeVehicle;
     }
 
-    public void setPoliceVehicleName(PoliceVehicle policeVehicleName) {
-        this.policeVehicleName = policeVehicleName;
+    public void setPoliceVehicle(PoliceVehicle policeVehicle) {
+        this.policeVehicle = policeVehicle;
     }
 
     @Override
     public int hashCode() {
         int hash = 0;
-        hash += (sessionId != null ? sessionId.hashCode() : 0);
+        hash += (bcmsSessionPoliceVehiclePK != null ? bcmsSessionPoliceVehiclePK.hashCode() : 0);
         return hash;
     }
 
@@ -102,7 +100,7 @@ public class BcmsSessionPoliceVehicle implements Serializable {
             return false;
         }
         BcmsSessionPoliceVehicle other = (BcmsSessionPoliceVehicle) object;
-        if ((this.sessionId == null && other.sessionId != null) || (this.sessionId != null && !this.sessionId.equals(other.sessionId))) {
+        if ((this.bcmsSessionPoliceVehiclePK == null && other.bcmsSessionPoliceVehiclePK != null) || (this.bcmsSessionPoliceVehiclePK != null && !this.bcmsSessionPoliceVehiclePK.equals(other.bcmsSessionPoliceVehiclePK))) {
             return false;
         }
         return true;
@@ -110,7 +108,7 @@ public class BcmsSessionPoliceVehicle implements Serializable {
 
     @Override
     public String toString() {
-        return "BCMS.entity.BcmsSessionPoliceVehicle[ sessionId=" + sessionId + " ]";
+        return "com.java.BCMS.entity.BcmsSessionPoliceVehicle[ bcmsSessionPoliceVehiclePK=" + bcmsSessionPoliceVehiclePK + " ]";
     }
     
 }
