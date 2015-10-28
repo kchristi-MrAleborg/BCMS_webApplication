@@ -81,6 +81,7 @@ public class TestApplication {
              * are effectively processed:
              */
             Thread.sleep(100);
+            psc_bCMS.reset();
             //bCMS.stop();
         } catch (Throwable t) {
             t.printStackTrace();

@@ -13,6 +13,7 @@ import com.pauware.pauware_engine._Exception.Statechart_exception;
  */
 @javax.ejb.Local
 public interface BCMSLocal {
+    void reset() throws Statechart_exception;
     void no_more_route_left() throws Statechart_exception;
     void crisis_is_more_severe() throws Statechart_exception;
     void crisis_is_less_severe() throws Statechart_exception;
