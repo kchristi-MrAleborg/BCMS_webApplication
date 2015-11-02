@@ -63,8 +63,11 @@ public class TestApplication {
             psc_bCMS.police_vehicle_dispatched("PV2");
             Thread.sleep(100);
             psc_bCMS.police_vehicle_breakdown("PV1", null);
+            Thread.sleep(100);
             fsc_bCMS.fire_truck_arrived("FT1");
+            Thread.sleep(100);
             fsc_bCMS.fire_truck_arrived("FT2");
+            Thread.sleep(100);
 
             psc_bCMS.police_vehicle_arrived("PV2");
             // 'PV1' had an accident above, so between comments:

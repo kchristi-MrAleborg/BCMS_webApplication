@@ -389,7 +389,7 @@ public class BCMS extends Timer_monitor implements FSC_Remote, PSC_Remote {
         _bCMS_state_machine.fires(_Close, _Completion_of_objectives, _End_of_crisis);
         
         
-        this.setSession();
+        setSession();
         
         
         _bCMS_state_machine.start();
@@ -399,8 +399,8 @@ public class BCMS extends Timer_monitor implements FSC_Remote, PSC_Remote {
         ////// ****************************  CREATION D'UNE NOUVELLE SESSION DANS LA BASE ***********
         java.text.DateFormat format = new java.text.SimpleDateFormat("yyyy/MM/dd HH:mm:ss");
         java.util.Date date = new java.util.Date();
-        this._sessionId = (format.format(date));
-        this.insertSession(_sessionId);
+        _sessionId = (format.format(date));
+        insertSession(_sessionId);
         ////// *************************************************************************************
     }
 
@@ -421,14 +421,14 @@ public class BCMS extends Timer_monitor implements FSC_Remote, PSC_Remote {
     public void FSC_connection_request() throws Statechart_exception {
         _bCMS_state_machine.run_to_completion(_FSC_connection_request);
         
-        this.insertEvent(_FSC_connection_request, this._bCMS_state_machine.current_state());
+        event.insertEvent(_FSC_connection_request, _bCMS_state_machine.current_state(), _bcmsSession);
     }
 
     @Override
     public void PSC_connection_request() throws Statechart_exception {
         _bCMS_state_machine.run_to_completion(_PSC_connection_request);
         
-        this.insertEvent(_PSC_connection_request, this._bCMS_state_machine.current_state());
+        event.insertEvent(_PSC_connection_request, _bCMS_state_machine.current_state(), _bcmsSession);
     }
     
     
@@ -438,7 +438,7 @@ public class BCMS extends Timer_monitor implements FSC_Remote, PSC_Remote {
         _bCMS_state_machine.fires(_State_fire_truck_number, _Number_of_police_vehicle_defined, _Route_plan_development, true, this, "set_number_of_fire_truck_required", new Object[]{number_of_fire_truck_required});
         _bCMS_state_machine.run_to_completion(_State_fire_truck_number);
         
-        this.insertEvent(_State_fire_truck_number, this._bCMS_state_machine.current_state());
+        event.insertEvent(_State_fire_truck_number, _bCMS_state_machine.current_state(), _bcmsSession);
     }
 
     @Override
@@ -447,7 +447,7 @@ public class BCMS extends Timer_monitor implements FSC_Remote, PSC_Remote {
         _bCMS_state_machine.fires(_State_police_vehicle_number, _Number_of_fire_truck_defined, _Route_plan_development, true, this, "set_number_of_police_vehicle_required", new Object[]{number_of_police_vehicle_required});
         _bCMS_state_machine.run_to_completion(_State_police_vehicle_number);
         
-        this.insertEvent(_State_police_vehicle_number, this._bCMS_state_machine.current_state());
+        event.insertEvent(_State_police_vehicle_number, _bCMS_state_machine.current_state(), _bcmsSession);
     }
 
     @Override
@@ -463,7 +463,7 @@ public class BCMS extends Timer_monitor implements FSC_Remote, PSC_Remote {
             throw new Statechart_exception("Fire truck route " + route_name + " does not exist...");
         }
         
-        this.insertEvent(_Route_for_fire_trucks, this._bCMS_state_machine.current_state());
+        event.insertEvent(_Route_for_fire_trucks, _bCMS_state_machine.current_state(), _bcmsSession);
     }
 
     @Override
@@ -478,50 +478,50 @@ public class BCMS extends Timer_monitor implements FSC_Remote, PSC_Remote {
             throw new Statechart_exception("Police vehicle route " + route_name + " does not exist...");
         }
         
-        this.insertEvent(_Route_for_police_vehicles, this._bCMS_state_machine.current_state());
+        event.insertEvent(_Route_for_police_vehicles, _bCMS_state_machine.current_state(), _bcmsSession);
     }
 
     @Override
     public void no_more_route_left() throws Statechart_exception {
         _bCMS_state_machine.run_to_completion(_No_more_route_left);
         
-        this.insertEvent(_No_more_route_left, this._bCMS_state_machine.current_state());
+        event.insertEvent(_No_more_route_left, _bCMS_state_machine.current_state(), _bcmsSession);
     }
 
     @Override
     public void FSC_agrees_about_fire_truck_route() throws Statechart_exception {
         _bCMS_state_machine.run_to_completion(_FSC_agrees_about_fire_truck_route);
         
-        this.insertEvent(_FSC_agrees_about_fire_truck_route, this._bCMS_state_machine.current_state());
+        event.insertEvent(_FSC_agrees_about_fire_truck_route, _bCMS_state_machine.current_state(), _bcmsSession);
     }
 
     @Override
     public void FSC_agrees_about_police_vehicle_route() throws Statechart_exception {
         _bCMS_state_machine.run_to_completion(_FSC_agrees_about_police_vehicle_route);
         
-        this.insertEvent(_FSC_agrees_about_police_vehicle_route, this._bCMS_state_machine.current_state());
+        event.insertEvent(_FSC_agrees_about_police_vehicle_route, _bCMS_state_machine.current_state(), _bcmsSession);
     }
 
     @Override
     public void FSC_disagrees_about_fire_truck_route() throws Statechart_exception {
         _bCMS_state_machine.run_to_completion(_FSC_disagrees_about_fire_truck_route);
         
-        this.insertEvent(_FSC_disagrees_about_fire_truck_route, this._bCMS_state_machine.current_state());
+        event.insertEvent(_FSC_disagrees_about_fire_truck_route, _bCMS_state_machine.current_state(), _bcmsSession);
     }
 
     @Override
     public void FSC_disagrees_about_police_vehicle_route() throws Statechart_exception {
         _bCMS_state_machine.run_to_completion(_FSC_disagrees_about_police_vehicle_route);
         
-        this.insertEvent(_FSC_disagrees_about_police_vehicle_route, this._bCMS_state_machine.current_state());
+        event.insertEvent(_FSC_disagrees_about_police_vehicle_route, _bCMS_state_machine.current_state(), _bcmsSession);
     }
 
     
     @Override
     public void enough_fire_trucks_dispatched() throws Statechart_exception {
         _bCMS_state_machine.run_to_completion(_Enough_fire_trucks_dispatched, AbstractStatechart_monitor.Compute_invariants);
-            
-        this.insertEvent_Transaction(_Enough_fire_trucks_dispatched, this._bCMS_state_machine.current_state());
+        
+        event.insertEvent(_Enough_fire_trucks_dispatched, _bCMS_state_machine.async_current_state(), _bcmsSession);
     }
 
     @Override
@@ -532,15 +532,15 @@ public class BCMS extends Timer_monitor implements FSC_Remote, PSC_Remote {
         _bCMS_state_machine.fires(_Fire_truck_dispatched, _All_police_vehicles_dispatched, _All_police_vehicles_dispatched, this, "fire_truck_dispatched_less_than_number_of_fire_truck_required", null, this, "enough_fire_trucks_dispatched", null, AbstractStatechart.Reentrance);
         _bCMS_state_machine.run_to_completion(_Fire_truck_dispatched);
     
-        this.insertFireTruck(fire_truck);
-        this.insertEvent(_Fire_truck_dispatched, this._bCMS_state_machine.current_state());
+        insertFireTruck(fire_truck);
+        event.insertEvent(_Fire_truck_dispatched, _bCMS_state_machine.current_state(), _bcmsSession);
     }
 
     @Override
     public void enough_police_vehicles_dispatched() throws Statechart_exception {
         _bCMS_state_machine.run_to_completion(_Enough_police_vehicles_dispatched, AbstractStatechart_monitor.Compute_invariants);
     
-        this.insertEvent_Transaction(_Enough_police_vehicles_dispatched, this._bCMS_state_machine.current_state());
+        event.insertEvent(_Enough_police_vehicles_dispatched, _bCMS_state_machine.async_current_state(), _bcmsSession);
     }
 
     @Override
@@ -551,15 +551,15 @@ public class BCMS extends Timer_monitor implements FSC_Remote, PSC_Remote {
         _bCMS_state_machine.fires(_Police_vehicle_dispatched, _All_fire_trucks_dispatched, _All_fire_trucks_dispatched, this, "police_vehicle_dispatched_less_than_number_of_police_vehicle_required", null, this, "enough_police_vehicles_dispatched", null, AbstractStatechart.Reentrance);
         _bCMS_state_machine.run_to_completion(_Police_vehicle_dispatched);
     
-        this.insertPoliceVehicle(police_vehicle);
-        this.insertEvent(_Police_vehicle_dispatched, this._bCMS_state_machine.current_state());
+        insertPoliceVehicle(police_vehicle);
+        event.insertEvent(_Police_vehicle_dispatched, _bCMS_state_machine.current_state(), _bcmsSession);
     }
 
     @Override
     public void enough_fire_trucks_arrived() throws Statechart_exception {
         _bCMS_state_machine.run_to_completion(_Enough_fire_trucks_arrived, AbstractStatechart_monitor.Compute_invariants);
     
-        this.insertEvent_Transaction(_Enough_fire_trucks_arrived, this._bCMS_state_machine.current_state());
+        event.insertEvent(_Enough_fire_trucks_arrived, _bCMS_state_machine.async_current_state(), _bcmsSession);
     }
 
     @Override
@@ -568,15 +568,15 @@ public class BCMS extends Timer_monitor implements FSC_Remote, PSC_Remote {
         _bCMS_state_machine.fires(_Fire_truck_arrived, _Fire_trucks_arriving, _Fire_trucks_arriving, this, "fire_truck_arrived_less_than_fire_truck_dispatched", null, this, "enough_fire_trucks_arrived", null, AbstractStatechart.Reentrance);
         _bCMS_state_machine.run_to_completion(_Fire_truck_arrived);
     
-        this.updateFireTruckStatus(fire_truck,vehicleState.Arrived.toString());
-        this.insertEvent(_Fire_truck_arrived, this._bCMS_state_machine.current_state());
+        updateFireTruckStatus(fire_truck,vehicleState.Arrived.toString());
+        event.insertEvent(_Fire_truck_arrived, _bCMS_state_machine.current_state(), _bcmsSession);
     }
 
     @Override
     public void enough_police_vehicles_arrived() throws Statechart_exception {
         _bCMS_state_machine.run_to_completion(_Enough_police_vehicles_arrived, AbstractStatechart_monitor.Compute_invariants);
     
-        this.insertEvent_Transaction(_Enough_police_vehicles_arrived, this._bCMS_state_machine.current_state());
+        event.insertEvent(_Enough_police_vehicles_arrived, _bCMS_state_machine.async_current_state(), _bcmsSession);
     }
 
     @Override
@@ -585,8 +585,8 @@ public class BCMS extends Timer_monitor implements FSC_Remote, PSC_Remote {
         _bCMS_state_machine.fires(_Police_vehicle_arrived, _Police_vehicles_arriving, _Police_vehicles_arriving, this, "police_vehicle_arrived_less_than_police_vehicle_dispatched", null, this, "enough_police_vehicles_arrived", null, AbstractStatechart.Reentrance);
         _bCMS_state_machine.run_to_completion(_Police_vehicle_arrived);
     
-        this.updatePoliceVehicleStatus(police_vehicle,vehicleState.Arrived.toString());
-        this.insertEvent(_Police_vehicle_arrived, this._bCMS_state_machine.current_state());
+        updatePoliceVehicleStatus(police_vehicle,vehicleState.Arrived.toString());
+        event.insertEvent(_Police_vehicle_arrived, _bCMS_state_machine.current_state(), _bcmsSession);
     }
 
     @Override
@@ -595,7 +595,7 @@ public class BCMS extends Timer_monitor implements FSC_Remote, PSC_Remote {
         _Step_3_Coordination.allowedEvent(_Timeout, this, "record_timeout_reason", new Object[]{new Long(delay), _bCMS_state_machine.current_state()});
         _bCMS_state_machine.run_to_completion(_Timeout);
     
-        this.insertEvent(_Timeout, this._bCMS_state_machine.current_state());
+        event.insertEvent(_Timeout, _bCMS_state_machine.current_state(), _bcmsSession);
     }
 
     @Override
@@ -614,12 +614,12 @@ public class BCMS extends Timer_monitor implements FSC_Remote, PSC_Remote {
         _Step_5_Arrival.allowedEvent(_Fire_truck_breakdown, this, "fire_trucks_dispatched_remove", args);
         _bCMS_state_machine.run_to_completion(_Fire_truck_breakdown);
     
-        this.updateFireTruckStatus(fire_truck,vehicleState.Breakdown.toString()); 
+        updateFireTruckStatus(fire_truck,vehicleState.Breakdown.toString()); 
         if (replacement_fire_truck != null) 
         {
-            this.insertFireTruck(replacement_fire_truck); 
+            insertFireTruck(replacement_fire_truck); 
         }
-        this.insertEvent(_Fire_truck_breakdown, this._bCMS_state_machine.current_state());
+        event.insertEvent(_Fire_truck_breakdown, _bCMS_state_machine.current_state(), _bcmsSession);
     }
 
     @Override
@@ -633,12 +633,12 @@ public class BCMS extends Timer_monitor implements FSC_Remote, PSC_Remote {
         _Step_5_Arrival.allowedEvent(_Police_vehicle_breakdown, this, "police_vehicles_dispatched_remove", args);
         _bCMS_state_machine.run_to_completion(_Police_vehicle_breakdown);
     
-        this.updatePoliceVehicleStatus(police_vehicle,vehicleState.Breakdown.toString()); 
+        updatePoliceVehicleStatus(police_vehicle,vehicleState.Breakdown.toString()); 
         if (replacement_police_vehicle != null) 
         { 
-            this.insertPoliceVehicle(replacement_police_vehicle); 
+            insertPoliceVehicle(replacement_police_vehicle); 
         }
-        this.insertEvent(_Police_vehicle_breakdown, this._bCMS_state_machine.current_state());
+        event.insertEvent(_Police_vehicle_breakdown, _bCMS_state_machine.current_state(), _bcmsSession);
     }
 
     @Override
@@ -646,8 +646,8 @@ public class BCMS extends Timer_monitor implements FSC_Remote, PSC_Remote {
         _bCMS_state_machine.fires(_Fire_truck_blocked, _Step_5_Arrival, _Crisis_details_exchange, true, this, "fire_trucks_dispatched_remove", new Object[]{fire_truck});
         _bCMS_state_machine.run_to_completion(_Fire_truck_blocked);
     
-        this.updateFireTruckStatus(fire_truck,vehicleState.Blocked.toString());
-        this.insertEvent(_Fire_truck_blocked, this._bCMS_state_machine.current_state());
+        updateFireTruckStatus(fire_truck,vehicleState.Blocked.toString());
+        event.insertEvent(_Fire_truck_blocked, _bCMS_state_machine.current_state(), _bcmsSession);
     }
 
     @Override
@@ -655,28 +655,28 @@ public class BCMS extends Timer_monitor implements FSC_Remote, PSC_Remote {
         _bCMS_state_machine.fires(_Police_vehicle_blocked, _Step_5_Arrival, _Crisis_details_exchange, true, this, "police_vehicles_dispatched_remove", new Object[]{police_vehicle});
         _bCMS_state_machine.run_to_completion(_Police_vehicle_blocked);
     
-        this.updatePoliceVehicleStatus(police_vehicle,vehicleState.Blocked.toString());
-        this.insertEvent(_Police_vehicle_blocked, this._bCMS_state_machine.current_state());
+        updatePoliceVehicleStatus(police_vehicle,vehicleState.Blocked.toString());
+        event.insertEvent(_Police_vehicle_blocked, _bCMS_state_machine.current_state(), _bcmsSession);
     }
 
     @Override
     public void crisis_is_more_severe() throws Statechart_exception {
         _bCMS_state_machine.run_to_completion(_Crisis_is_more_severe);
     
-        this.insertEvent(_Crisis_is_more_severe, this._bCMS_state_machine.current_state());
+        event.insertEvent(_Crisis_is_more_severe, _bCMS_state_machine.current_state(), _bcmsSession);
     }
 
     @Override
     public void crisis_is_less_severe() throws Statechart_exception {
         _bCMS_state_machine.run_to_completion(_Crisis_is_less_severe);
     
-        this.insertEvent(_Crisis_is_less_severe, this._bCMS_state_machine.current_state());
+        event.insertEvent(_Crisis_is_less_severe, _bCMS_state_machine.current_state(), _bcmsSession);
     }
 
     public void close() throws Statechart_exception {
         _bCMS_state_machine.run_to_completion(_Close);
     
-        this.insertEvent(_Close, this._bCMS_state_machine.current_state());
+        event.insertEvent(_Close, _bCMS_state_machine.current_state(), _bcmsSession);
     }
 
     /**
@@ -861,7 +861,7 @@ public class BCMS extends Timer_monitor implements FSC_Remote, PSC_Remote {
     public void reset() throws Statechart_exception {
         _bCMS_state_machine.to_state(_Init.name());        
         
-        this.setSession();
+        setSession();
     }
     
     
@@ -874,7 +874,8 @@ public class BCMS extends Timer_monitor implements FSC_Remote, PSC_Remote {
     @javax.persistence.PersistenceContext(name = "BCMS_webApplicationPU")
     private javax.persistence.EntityManager _entity_manager;
     
-    
+    @javax.ejb.EJB
+    private EventBeanLocal event;
     
     /// Methodes additionnelles
     
@@ -902,17 +903,17 @@ public class BCMS extends Timer_monitor implements FSC_Remote, PSC_Remote {
         fireTruck.setBcmsSession(_bcmsSession);
         fireTruck.setFireTruckStatus(vehicleState.Dispatched.toString());
         
-        this._entity_manager.persist(fireTruck);
+        _entity_manager.persist(fireTruck);
         //this._entity_manager.getTransaction().commit();
     }
     
     private void insertPoliceVehicle(final String name){
-        //this._entity_manager.getTransaction().begin();
+        //._entity_manager.getTransaction().begin();
         com.java.BCMS.entity.BcmsSessionPoliceVehicle policeVehicle = new com.java.BCMS.entity.BcmsSessionPoliceVehicle(_sessionId, name);
         policeVehicle.setBcmsSession(_bcmsSession);
         policeVehicle.setPoliceVehicleStatus(vehicleState.Dispatched.toString());
         
-        this._entity_manager.persist(policeVehicle);
+        _entity_manager.persist(policeVehicle);
         //this._entity_manager.getTransaction().commit();
     }
     
@@ -920,39 +921,24 @@ public class BCMS extends Timer_monitor implements FSC_Remote, PSC_Remote {
         //this._entity_manager.getTransaction().begin();
         /*com.java.BCMS.entity.BcmsSessionFireTruck fireTruck = this._entity_manager.find(com.java.BCMS.entity.BcmsSessionFireTruck.class,name);
         */
-        com.java.BCMS.entity.BcmsSessionFireTruck fireTruck = this._entity_manager.find(com.java.BCMS.entity.BcmsSessionFireTruck.class, new com.java.BCMS.entity.BcmsSessionFireTruckPK(_sessionId, name));
+        com.java.BCMS.entity.BcmsSessionFireTruck fireTruck = _entity_manager.find(com.java.BCMS.entity.BcmsSessionFireTruck.class, new com.java.BCMS.entity.BcmsSessionFireTruckPK(_sessionId, name));
         fireTruck.setFireTruckStatus(status);
-        this._entity_manager.merge(fireTruck);
+        _entity_manager.merge(fireTruck);
         //this._entity_manager.getTransaction().commit();
     }
     
     public void updatePoliceVehicleStatus(final String name,final String status){
         //this._entity_manager.getTransaction().begin();
-        com.java.BCMS.entity.BcmsSessionPoliceVehicle policeVehicle = this._entity_manager.find(com.java.BCMS.entity.BcmsSessionPoliceVehicle.class, new com.java.BCMS.entity.BcmsSessionPoliceVehiclePK(_sessionId, name));
+        com.java.BCMS.entity.BcmsSessionPoliceVehicle policeVehicle = _entity_manager.find(com.java.BCMS.entity.BcmsSessionPoliceVehicle.class, new com.java.BCMS.entity.BcmsSessionPoliceVehiclePK(_sessionId, name));
         policeVehicle.setPoliceVehicleStatus(status);
-        this._entity_manager.merge(policeVehicle);
+        _entity_manager.merge(policeVehicle);
         //this._entity_manager.getTransaction().commit();
     }
     
     private void insertSession(final String id){
         //this._entity_manager.getTransaction().begin();
-        this._bcmsSession = new com.java.BCMS.entity.BcmsSession(id);
-        this._entity_manager.persist(this._bcmsSession);
-        //this._entity_manager.getTransaction().commit();
-    }
-    
-    
-    private void insertEvent (final String name, final String trace){
-        //this._entity_manager.getTransaction().begin();
-        java.text.DateFormat format = new java.text.SimpleDateFormat("yyyy/MM/dd HH:mm:ss:SSS");
-        java.util.Date date = new java.util.Date();
-        
-        //System.out.println("InsertEvent");
-        
-        com.java.BCMS.entity.Event event = new com.java.BCMS.entity.Event(new com.java.BCMS.entity.EventPK(name, (format.format(date))));
-        event.setSessionId(this._bcmsSession);
-        event.setExecutionTrace(trace);
-        this._entity_manager.persist(event);
+        _bcmsSession = new com.java.BCMS.entity.BcmsSession(id);
+        _entity_manager.persist(_bcmsSession);
         //this._entity_manager.getTransaction().commit();
     }
     
