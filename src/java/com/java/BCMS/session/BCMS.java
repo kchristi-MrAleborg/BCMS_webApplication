@@ -281,118 +281,124 @@ public class BCMS extends Timer_monitor implements FSC_Remote, PSC_Remote {
         _bCMS_state_machine = new Statechart_monitor(_Init.xor(_FSC_connected).xor(_PSC_connected).xor(_Crisis_details_exchange).xor(_Step_3_Coordination).xor(_Step_4_Dispatching).xor(_All_fire_trucks_dispatched).xor(_All_police_vehicles_dispatched).xor(_Step_5_Arrival).xor(_Completion_of_objectives).xor(_End_of_crisis), this.getClass().getSimpleName(), AbstractStatechart_monitor.Show_on_system_out/*, pv*/);
     }
 
-    //@PostConstruct
-    public void start() throws Statechart_exception {
-        _bCMS_state_machine.fires(_FSC_connection_request, _Init, _FSC_connected);
-        _bCMS_state_machine.fires(_PSC_connection_request, _Init, _PSC_connected);
-        _bCMS_state_machine.fires(_FSC_connection_request, _PSC_connected, _Crisis_details_exchange);
-        _bCMS_state_machine.fires(_PSC_connection_request, _FSC_connected, _Crisis_details_exchange);
-        /**
-         * These four transitions are registred with fake arguments so that they
-         * can be displayed by PauWare view. They are overriden at runtime with
-         * appropriate values:
-         */
-        _bCMS_state_machine.fires(_State_fire_truck_number, _Crisis_details_exchange, _Number_of_fire_truck_defined, true, this, "set_number_of_fire_truck_required", new Object[]{0});
-        _bCMS_state_machine.fires(_State_fire_truck_number, _Number_of_police_vehicle_defined, _Route_plan_development, true, this, "set_number_of_fire_truck_required", new Object[]{0});
-        _bCMS_state_machine.fires(_State_police_vehicle_number, _Crisis_details_exchange, _Number_of_police_vehicle_defined, true, this, "set_number_of_police_vehicle_required", new Object[]{0});
-        _bCMS_state_machine.fires(_State_police_vehicle_number, _Number_of_fire_truck_defined, _Route_plan_development, true, this, "set_number_of_police_vehicle_required", new Object[]{0});
-        /**
-         * End of fake arguments
-         */
-        /**
-         * The state machine is adapted because of PlantUML limitations:
-         */
-        /* Modification: event is internally re-sent to move to the right state inside '_Route_for_fire_trucks_development': */
-        //_bCMS_state_machine.fires(_Route_for_fire_trucks, _Route_plan_development, _Steps_33a1_33a2_Negotiation, true, this, "route_for_fires_trucks", null, AbstractStatechart.Reentrance);
-        _bCMS_state_machine.fires(_Route_for_fire_trucks, _Route_plan_development, _Route_for_fire_trucks_fixed);
-        /* Modification: event is internally re-sent to move to the right state inside '_Route_for_police_vehicles_development': */
-        //_bCMS_state_machine.fires(_Route_for_police_vehicles, _Route_plan_development, _Steps_33a1_33a2_Negotiation, true, this, "route_for_police_vehicles", null, AbstractStatechart.Reentrance);
-        _bCMS_state_machine.fires(_Route_for_police_vehicles, _Route_plan_development, _Route_for_police_vehicles_fixed); 
-        /**
-         * End of PlantUML limitations
-         */
-        _bCMS_state_machine.fires(_Route_for_fire_trucks, _Route_for_fire_trucks_to_be_proposed, _Route_for_fire_trucks_fixed);
-        _bCMS_state_machine.fires(_Route_for_police_vehicles, _Route_for_police_vehicles_to_be_proposed, _Route_for_police_vehicles_fixed);
-        _bCMS_state_machine.fires(_FSC_disagrees_about_fire_truck_route, _Route_for_fire_trucks_fixed, _Route_for_fire_trucks_to_be_proposed);
-        _bCMS_state_machine.fires(_FSC_disagrees_about_police_vehicle_route, _Route_for_police_vehicles_fixed, _Route_for_police_vehicles_to_be_proposed);
-        /**
-         * The state machine is adapted because of PlantUML limitations:
-         */
-        /* suppression */ // _bCMS_state_machine.fires(_FSC_agrees_about_fire_truck_route, _Route_for_fire_trucks_fixed, _Step_4_Dispatching, this, "in_Route_for_police_vehicles_approved");
-        /* replacement */ _bCMS_state_machine.fires(_FSC_agrees_about_fire_truck_route, _Route_for_fire_trucks_fixed, _End_of_route_for_fire_trucks_development, this, "in_Route_for_police_vehicles_approved");
-        _bCMS_state_machine.fires(_FSC_agrees_about_fire_truck_route, _Route_for_fire_trucks_fixed, _Route_for_fire_trucks_approved, this, "not_in_Route_for_police_vehicles_approved");
-        /* suppression */ // _bCMS_state_machine.fires(_FSC_agrees_about_police_vehicle_route, _Route_for_police_vehicles_fixed, _Step_4_Dispatching, this, "in_Route_for_fire_trucks_approved");
-        /* replacement */ _bCMS_state_machine.fires(_FSC_agrees_about_police_vehicle_route, _Route_for_police_vehicles_fixed, _End_of_route_for_police_vehicles_development, this, "in_Route_for_fire_trucks_approved");
-        _bCMS_state_machine.fires(_FSC_agrees_about_police_vehicle_route, _Route_for_police_vehicles_fixed, _Route_for_police_vehicles_approved, this, "not_in_Route_for_fire_trucks_approved");
-        /**
-         * End of PlantUML limitations
-         */
-        /**
-         * The state machine is adapted because of PlantUML limitations:
-         */
-        /* addition */ _bCMS_state_machine.fires(AbstractStatechart.Completion, _Step_3_Coordination, _Step_4_Dispatching);
-        /**
-         * End of PlantUML limitations
-         */
-        _bCMS_state_machine.fires(_No_more_route_left, _Steps_33a1_33a2_Negotiation, _Step_4_Dispatching);
-        /**
-         * These eight transitions are registred with fake arguments so that
-         * they can be displayed by PauWare view. They are overriden at runtime
-         * with appropriate values:
-         */
-        _bCMS_state_machine.fires(_Fire_truck_dispatched, _Step_4_Dispatching, _Step_4_Dispatching, this, "fire_truck_dispatched_less_than_number_of_fire_truck_required", null, this, "fire_trucks_dispatched_add", new Object[]{""});
-        _bCMS_state_machine.fires(_Fire_truck_dispatched, _Step_4_Dispatching, _Step_4_Dispatching, this, "fire_truck_dispatched_less_than_number_of_fire_truck_required", null, this, "enough_fire_trucks_dispatched", null, AbstractStatechart.Reentrance);
-        _bCMS_state_machine.fires(_Fire_truck_dispatched, _All_police_vehicles_dispatched, _All_police_vehicles_dispatched, this, "fire_truck_dispatched_less_than_number_of_fire_truck_required", null, this, "fire_trucks_dispatched_add", new Object[]{""});
-        _bCMS_state_machine.fires(_Fire_truck_dispatched, _All_police_vehicles_dispatched, _All_police_vehicles_dispatched, this, "fire_truck_dispatched_less_than_number_of_fire_truck_required", null, this, "enough_fire_trucks_dispatched", null, AbstractStatechart.Reentrance);
-        _bCMS_state_machine.fires(_Police_vehicle_dispatched, _Step_4_Dispatching, _Step_4_Dispatching, this, "police_vehicle_dispatched_less_than_number_of_police_vehicle_required", null, this, "police_vehicles_dispatched_add", new Object[]{""});
-        _bCMS_state_machine.fires(_Police_vehicle_dispatched, _Step_4_Dispatching, _Step_4_Dispatching, this, "police_vehicle_dispatched_less_than_number_of_police_vehicle_required", null, this, "enough_police_vehicles_dispatched", null, AbstractStatechart.Reentrance);
-        _bCMS_state_machine.fires(_Police_vehicle_dispatched, _All_fire_trucks_dispatched, _All_fire_trucks_dispatched, this, "police_vehicle_dispatched_less_than_number_of_police_vehicle_required", null, this, "police_vehicles_dispatched_add", new Object[]{""});
-        _bCMS_state_machine.fires(_Police_vehicle_dispatched, _All_fire_trucks_dispatched, _All_fire_trucks_dispatched, this, "police_vehicle_dispatched_less_than_number_of_police_vehicle_required", null, this, "enough_police_vehicles_dispatched", null, AbstractStatechart.Reentrance);
-        /**
-         * End of fake arguments
-         */
-        _bCMS_state_machine.fires(_Enough_fire_trucks_dispatched, _Step_4_Dispatching, _All_fire_trucks_dispatched, this, "fire_truck_dispatched_greater_than_or_equal_to_number_of_fire_truck_required");
-        _bCMS_state_machine.fires(_Enough_fire_trucks_dispatched, _All_police_vehicles_dispatched, _Step_5_Arrival, this, "fire_truck_dispatched_greater_than_or_equal_to_number_of_fire_truck_required");
-
-        _bCMS_state_machine.fires(_Enough_police_vehicles_dispatched, _Step_4_Dispatching, _All_police_vehicles_dispatched, this, "police_vehicle_dispatched_greater_than_or_equal_to_number_of_police_vehicle_required");
-        _bCMS_state_machine.fires(_Enough_police_vehicles_dispatched, _All_fire_trucks_dispatched, _Step_5_Arrival, this, "police_vehicle_dispatched_greater_than_or_equal_to_number_of_police_vehicle_required");
-
-        _bCMS_state_machine.fires(_Enough_fire_trucks_arrived, _Fire_trucks_arriving, _All_fire_trucks_arrived, this, "fire_truck_arrived_greater_than_or_equal_to_fire_truck_dispatched_and_not_in_All_police_vehicles_arrived");
-        _bCMS_state_machine.fires(_Enough_police_vehicles_arrived, _Police_vehicles_arriving, _All_police_vehicles_arrived, this, "police_vehicle_arrived_greater_than_or_equal_to_police_vehicle_dispatched_and_not_in_All_fire_trucks_arrived");
-
-        _bCMS_state_machine.fires(_Crisis_is_more_severe, _Step_5_Arrival, _Crisis_details_exchange);
-        /**
-         * The state machine is adapted because of PlantUML limitations:
-         */
-        /* suppression */ // _bCMS_state_machine.fires(_Enough_fire_trucks_arrived, _Fire_trucks_arriving, _Completion_of_objectives, this, "fire_truck_arrived_greater_than_or_equal_to_fire_truck_dispatched_and_in_All_police_vehicles_arrived");
-        /* replacement */ _bCMS_state_machine.fires(_Enough_fire_trucks_arrived, _Fire_trucks_arriving, _End_of_fire_trucks_arrival, this, "fire_truck_arrived_greater_than_or_equal_to_fire_truck_dispatched_and_in_All_police_vehicles_arrived");
-        /* suppression */ // _bCMS_state_machine.fires(_Enough_police_vehicles_arrived, _Police_vehicles_arriving, _Completion_of_objectives, this, "police_vehicle_arrived_greater_than_or_equal_to_police_vehicle_dispatched_and_in_All_fire_trucks_arrived");
-        /* replacement */ _bCMS_state_machine.fires(_Enough_police_vehicles_arrived, _Police_vehicles_arriving, _End_of_police_vehicles_arrival, this, "police_vehicle_arrived_greater_than_or_equal_to_police_vehicle_dispatched_and_in_All_fire_trucks_arrived");
-        /* addition */ _bCMS_state_machine.fires(AbstractStatechart.Completion, _Step_5_Arrival, _Completion_of_objectives);
-        /**
-         * End of PlantUML limitations
-         */
-        /**
-         * These six transitions are registred with fake arguments so that they
-         * can be displayed by PauWare view. They are overriden at runtime with
-         * appropriate values:
-         */
-        _bCMS_state_machine.fires(_Fire_truck_arrived, _Fire_trucks_arriving, _Fire_trucks_arriving, this, "fire_truck_arrived_less_than_fire_truck_dispatched", null, this, "fire_trucks_arrived_add", new Object[]{""});
-        _bCMS_state_machine.fires(_Fire_truck_arrived, _Fire_trucks_arriving, _Fire_trucks_arriving, this, "fire_truck_arrived_less_than_fire_truck_dispatched", null, this, "enough_fire_trucks_arrived", null, AbstractStatechart.Reentrance);
-        _bCMS_state_machine.fires(_Police_vehicle_arrived, _Police_vehicles_arriving, _Police_vehicles_arriving, this, "police_vehicle_arrived_less_than_police_vehicle_dispatched", null, this, "police_vehicles_arrived_add", new Object[]{""});
-        _bCMS_state_machine.fires(_Police_vehicle_arrived, _Police_vehicles_arriving, _Police_vehicles_arriving, this, "police_vehicle_arrived_less_than_police_vehicle_dispatched", null, this, "enough_police_vehicles_arrived", null, AbstractStatechart.Reentrance);
-        _bCMS_state_machine.fires(_Fire_truck_blocked, _Step_5_Arrival, _Crisis_details_exchange, true, this, "fire_trucks_dispatched_remove", new Object[]{""});
-        _bCMS_state_machine.fires(_Police_vehicle_blocked, _Step_5_Arrival, _Crisis_details_exchange, true, this, "police_vehicles_dispatched_remove", new Object[]{""});
-        /**
-         * End of fake arguments
-         */
-        _bCMS_state_machine.fires(_Close, _Completion_of_objectives, _End_of_crisis);
-        
-        
-        setSession();
-        
-        
-        _bCMS_state_machine.start();
+    @PostConstruct
+    public void start(){
+        try {
+            _bCMS_state_machine.fires(_FSC_connection_request, _Init, _FSC_connected);
+            _bCMS_state_machine.fires(_PSC_connection_request, _Init, _PSC_connected);
+            _bCMS_state_machine.fires(_FSC_connection_request, _PSC_connected, _Crisis_details_exchange);
+            _bCMS_state_machine.fires(_PSC_connection_request, _FSC_connected, _Crisis_details_exchange);
+            /**
+             * These four transitions are registred with fake arguments so that they
+             * can be displayed by PauWare view. They are overriden at runtime with
+             * appropriate values:
+             */
+            _bCMS_state_machine.fires(_State_fire_truck_number, _Crisis_details_exchange, _Number_of_fire_truck_defined, true, this, "set_number_of_fire_truck_required", new Object[]{0});
+            _bCMS_state_machine.fires(_State_fire_truck_number, _Number_of_police_vehicle_defined, _Route_plan_development, true, this, "set_number_of_fire_truck_required", new Object[]{0});
+            _bCMS_state_machine.fires(_State_police_vehicle_number, _Crisis_details_exchange, _Number_of_police_vehicle_defined, true, this, "set_number_of_police_vehicle_required", new Object[]{0});
+            _bCMS_state_machine.fires(_State_police_vehicle_number, _Number_of_fire_truck_defined, _Route_plan_development, true, this, "set_number_of_police_vehicle_required", new Object[]{0});
+            /**
+             * End of fake arguments
+             */
+            /**
+             * The state machine is adapted because of PlantUML limitations:
+             */
+            /* Modification: event is internally re-sent to move to the right state inside '_Route_for_fire_trucks_development': */
+            //_bCMS_state_machine.fires(_Route_for_fire_trucks, _Route_plan_development, _Steps_33a1_33a2_Negotiation, true, this, "route_for_fires_trucks", null, AbstractStatechart.Reentrance);
+            _bCMS_state_machine.fires(_Route_for_fire_trucks, _Route_plan_development, _Route_for_fire_trucks_fixed);
+            /* Modification: event is internally re-sent to move to the right state inside '_Route_for_police_vehicles_development': */
+            //_bCMS_state_machine.fires(_Route_for_police_vehicles, _Route_plan_development, _Steps_33a1_33a2_Negotiation, true, this, "route_for_police_vehicles", null, AbstractStatechart.Reentrance);
+            _bCMS_state_machine.fires(_Route_for_police_vehicles, _Route_plan_development, _Route_for_police_vehicles_fixed);
+            /**
+             * End of PlantUML limitations
+             */
+            _bCMS_state_machine.fires(_Route_for_fire_trucks, _Route_for_fire_trucks_to_be_proposed, _Route_for_fire_trucks_fixed);
+            _bCMS_state_machine.fires(_Route_for_police_vehicles, _Route_for_police_vehicles_to_be_proposed, _Route_for_police_vehicles_fixed);
+            _bCMS_state_machine.fires(_FSC_disagrees_about_fire_truck_route, _Route_for_fire_trucks_fixed, _Route_for_fire_trucks_to_be_proposed);
+            _bCMS_state_machine.fires(_FSC_disagrees_about_police_vehicle_route, _Route_for_police_vehicles_fixed, _Route_for_police_vehicles_to_be_proposed);
+            /**
+             * The state machine is adapted because of PlantUML limitations:
+             */
+            /* suppression */ // _bCMS_state_machine.fires(_FSC_agrees_about_fire_truck_route, _Route_for_fire_trucks_fixed, _Step_4_Dispatching, this, "in_Route_for_police_vehicles_approved");
+            /* replacement */ _bCMS_state_machine.fires(_FSC_agrees_about_fire_truck_route, _Route_for_fire_trucks_fixed, _End_of_route_for_fire_trucks_development, this, "in_Route_for_police_vehicles_approved");
+            _bCMS_state_machine.fires(_FSC_agrees_about_fire_truck_route, _Route_for_fire_trucks_fixed, _Route_for_fire_trucks_approved, this, "not_in_Route_for_police_vehicles_approved");
+            /* suppression */ // _bCMS_state_machine.fires(_FSC_agrees_about_police_vehicle_route, _Route_for_police_vehicles_fixed, _Step_4_Dispatching, this, "in_Route_for_fire_trucks_approved");
+            /* replacement */ _bCMS_state_machine.fires(_FSC_agrees_about_police_vehicle_route, _Route_for_police_vehicles_fixed, _End_of_route_for_police_vehicles_development, this, "in_Route_for_fire_trucks_approved");
+            _bCMS_state_machine.fires(_FSC_agrees_about_police_vehicle_route, _Route_for_police_vehicles_fixed, _Route_for_police_vehicles_approved, this, "not_in_Route_for_fire_trucks_approved");
+            /**
+             * End of PlantUML limitations
+             */
+            /**
+             * The state machine is adapted because of PlantUML limitations:
+             */
+            /* addition */ _bCMS_state_machine.fires(AbstractStatechart.Completion, _Step_3_Coordination, _Step_4_Dispatching);
+            /**
+             * End of PlantUML limitations
+             */
+            _bCMS_state_machine.fires(_No_more_route_left, _Steps_33a1_33a2_Negotiation, _Step_4_Dispatching);
+            /**
+             * These eight transitions are registred with fake arguments so that
+             * they can be displayed by PauWare view. They are overriden at runtime
+             * with appropriate values:
+             */
+            _bCMS_state_machine.fires(_Fire_truck_dispatched, _Step_4_Dispatching, _Step_4_Dispatching, this, "fire_truck_dispatched_less_than_number_of_fire_truck_required", null, this, "fire_trucks_dispatched_add", new Object[]{""});
+            _bCMS_state_machine.fires(_Fire_truck_dispatched, _Step_4_Dispatching, _Step_4_Dispatching, this, "fire_truck_dispatched_less_than_number_of_fire_truck_required", null, this, "enough_fire_trucks_dispatched", null, AbstractStatechart.Reentrance);
+            _bCMS_state_machine.fires(_Fire_truck_dispatched, _All_police_vehicles_dispatched, _All_police_vehicles_dispatched, this, "fire_truck_dispatched_less_than_number_of_fire_truck_required", null, this, "fire_trucks_dispatched_add", new Object[]{""});
+            _bCMS_state_machine.fires(_Fire_truck_dispatched, _All_police_vehicles_dispatched, _All_police_vehicles_dispatched, this, "fire_truck_dispatched_less_than_number_of_fire_truck_required", null, this, "enough_fire_trucks_dispatched", null, AbstractStatechart.Reentrance);
+            _bCMS_state_machine.fires(_Police_vehicle_dispatched, _Step_4_Dispatching, _Step_4_Dispatching, this, "police_vehicle_dispatched_less_than_number_of_police_vehicle_required", null, this, "police_vehicles_dispatched_add", new Object[]{""});
+            _bCMS_state_machine.fires(_Police_vehicle_dispatched, _Step_4_Dispatching, _Step_4_Dispatching, this, "police_vehicle_dispatched_less_than_number_of_police_vehicle_required", null, this, "enough_police_vehicles_dispatched", null, AbstractStatechart.Reentrance);
+            _bCMS_state_machine.fires(_Police_vehicle_dispatched, _All_fire_trucks_dispatched, _All_fire_trucks_dispatched, this, "police_vehicle_dispatched_less_than_number_of_police_vehicle_required", null, this, "police_vehicles_dispatched_add", new Object[]{""});
+            _bCMS_state_machine.fires(_Police_vehicle_dispatched, _All_fire_trucks_dispatched, _All_fire_trucks_dispatched, this, "police_vehicle_dispatched_less_than_number_of_police_vehicle_required", null, this, "enough_police_vehicles_dispatched", null, AbstractStatechart.Reentrance);
+            /**
+             * End of fake arguments
+             */
+            _bCMS_state_machine.fires(_Enough_fire_trucks_dispatched, _Step_4_Dispatching, _All_fire_trucks_dispatched, this, "fire_truck_dispatched_greater_than_or_equal_to_number_of_fire_truck_required");
+            _bCMS_state_machine.fires(_Enough_fire_trucks_dispatched, _All_police_vehicles_dispatched, _Step_5_Arrival, this, "fire_truck_dispatched_greater_than_or_equal_to_number_of_fire_truck_required");
+            
+            _bCMS_state_machine.fires(_Enough_police_vehicles_dispatched, _Step_4_Dispatching, _All_police_vehicles_dispatched, this, "police_vehicle_dispatched_greater_than_or_equal_to_number_of_police_vehicle_required");
+            _bCMS_state_machine.fires(_Enough_police_vehicles_dispatched, _All_fire_trucks_dispatched, _Step_5_Arrival, this, "police_vehicle_dispatched_greater_than_or_equal_to_number_of_police_vehicle_required");
+            
+            _bCMS_state_machine.fires(_Enough_fire_trucks_arrived, _Fire_trucks_arriving, _All_fire_trucks_arrived, this, "fire_truck_arrived_greater_than_or_equal_to_fire_truck_dispatched_and_not_in_All_police_vehicles_arrived");
+            _bCMS_state_machine.fires(_Enough_police_vehicles_arrived, _Police_vehicles_arriving, _All_police_vehicles_arrived, this, "police_vehicle_arrived_greater_than_or_equal_to_police_vehicle_dispatched_and_not_in_All_fire_trucks_arrived");
+            
+            _bCMS_state_machine.fires(_Crisis_is_more_severe, _Step_5_Arrival, _Crisis_details_exchange);
+            /**
+             * The state machine is adapted because of PlantUML limitations:
+             */
+            /* suppression */ // _bCMS_state_machine.fires(_Enough_fire_trucks_arrived, _Fire_trucks_arriving, _Completion_of_objectives, this, "fire_truck_arrived_greater_than_or_equal_to_fire_truck_dispatched_and_in_All_police_vehicles_arrived");
+            /* replacement */ _bCMS_state_machine.fires(_Enough_fire_trucks_arrived, _Fire_trucks_arriving, _End_of_fire_trucks_arrival, this, "fire_truck_arrived_greater_than_or_equal_to_fire_truck_dispatched_and_in_All_police_vehicles_arrived");
+            /* suppression */ // _bCMS_state_machine.fires(_Enough_police_vehicles_arrived, _Police_vehicles_arriving, _Completion_of_objectives, this, "police_vehicle_arrived_greater_than_or_equal_to_police_vehicle_dispatched_and_in_All_fire_trucks_arrived");
+            /* replacement */ _bCMS_state_machine.fires(_Enough_police_vehicles_arrived, _Police_vehicles_arriving, _End_of_police_vehicles_arrival, this, "police_vehicle_arrived_greater_than_or_equal_to_police_vehicle_dispatched_and_in_All_fire_trucks_arrived");
+            /* addition */ _bCMS_state_machine.fires(AbstractStatechart.Completion, _Step_5_Arrival, _Completion_of_objectives);
+            /**
+             * End of PlantUML limitations
+             */
+            /**
+             * These six transitions are registred with fake arguments so that they
+             * can be displayed by PauWare view. They are overriden at runtime with
+             * appropriate values:
+             */
+            _bCMS_state_machine.fires(_Fire_truck_arrived, _Fire_trucks_arriving, _Fire_trucks_arriving, this, "fire_truck_arrived_less_than_fire_truck_dispatched", null, this, "fire_trucks_arrived_add", new Object[]{""});
+            _bCMS_state_machine.fires(_Fire_truck_arrived, _Fire_trucks_arriving, _Fire_trucks_arriving, this, "fire_truck_arrived_less_than_fire_truck_dispatched", null, this, "enough_fire_trucks_arrived", null, AbstractStatechart.Reentrance);
+            _bCMS_state_machine.fires(_Police_vehicle_arrived, _Police_vehicles_arriving, _Police_vehicles_arriving, this, "police_vehicle_arrived_less_than_police_vehicle_dispatched", null, this, "police_vehicles_arrived_add", new Object[]{""});
+            _bCMS_state_machine.fires(_Police_vehicle_arrived, _Police_vehicles_arriving, _Police_vehicles_arriving, this, "police_vehicle_arrived_less_than_police_vehicle_dispatched", null, this, "enough_police_vehicles_arrived", null, AbstractStatechart.Reentrance);
+            _bCMS_state_machine.fires(_Fire_truck_blocked, _Step_5_Arrival, _Crisis_details_exchange, true, this, "fire_trucks_dispatched_remove", new Object[]{""});
+            _bCMS_state_machine.fires(_Police_vehicle_blocked, _Step_5_Arrival, _Crisis_details_exchange, true, this, "police_vehicles_dispatched_remove", new Object[]{""});
+            /**
+             * End of fake arguments
+             */
+            _bCMS_state_machine.fires(_Close, _Completion_of_objectives, _End_of_crisis);
+            
+            
+            setSession();
+            
+            _bCMS_state_machine.start();
+            
+        } catch (Statechart_transition_based_exception ex) {
+            Logger.getLogger(BCMS.class.getName()).log(Level.SEVERE, null, ex);
+        } catch (Statechart_exception ex) {
+            Logger.getLogger(BCMS.class.getName()).log(Level.SEVERE, null, ex);
+        }
     }
     
     private void setSession(){
@@ -673,10 +679,15 @@ public class BCMS extends Timer_monitor implements FSC_Remote, PSC_Remote {
         event.insertEvent(_Crisis_is_less_severe, _bCMS_state_machine.current_state(), _bcmsSession);
     }
 
-    public void close() throws Statechart_exception {
-        _bCMS_state_machine.run_to_completion(_Close);
-    
-        event.insertEvent(_Close, _bCMS_state_machine.current_state(), _bcmsSession);
+    @PreDestroy
+    public void close(){
+        try {
+            _bCMS_state_machine.run_to_completion(_Close);
+            
+            event.insertEvent(_Close, _bCMS_state_machine.current_state(), _bcmsSession);
+        } catch (Statechart_exception ex) {
+            Logger.getLogger(BCMS.class.getName()).log(Level.SEVERE, null, ex);
+        }
     }
 
     /**
@@ -877,25 +888,7 @@ public class BCMS extends Timer_monitor implements FSC_Remote, PSC_Remote {
     @javax.ejb.EJB
     private EventBeanLocal event;
     
-    /// Methodes additionnelles
-    
-    @PostConstruct
-    public void strt(){
-        try {
-            start();
-        } catch (Statechart_exception ex) {
-            Logger.getLogger(BCMS.class.getName()).log(Level.SEVERE, null, ex);
-        }
-    }    
-    
-    @PreDestroy
-    public void clse(){
-        try {
-            close();
-        } catch (Statechart_exception ex) {
-            Logger.getLogger(BCMS.class.getName()).log(Level.SEVERE, null, ex);
-        }
-    }
+    /// Methodes additionnelles    
     
     private void insertFireTruck(final String name){
         //this._entity_manager.getTransaction().begin();
