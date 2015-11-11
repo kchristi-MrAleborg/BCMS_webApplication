@@ -888,7 +888,11 @@ public class BCMS extends Timer_monitor implements FSC_Remote, PSC_Remote {
     @javax.ejb.EJB
     private EventBeanLocal event;
     
-    /// Methodes additionnelles    
+    /// Methodes additionnelles  
+    
+    public javax.persistence.EntityManager getEntityManager(){
+        return _entity_manager;
+    }
     
     private void insertFireTruck(final String name){
         //this._entity_manager.getTransaction().begin();
