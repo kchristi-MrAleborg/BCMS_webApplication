@@ -1,0 +1,42 @@
+<?xml version='1.0' encoding='UTF-8' ?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:h="http://xmlns.jcp.org/jsf/html"
+      xmlns:f="http://java.sun.com/jsf/core">
+    <h:head>
+        <title>BCMS</title>
+        
+    </h:head>
+    
+    <h:body>
+        
+        <h1>Barbados Crisis Management System</h1>
+      
+   
+        
+        <div class="left" style="float: left"> <!-- Temporaire, à mettre dans un css-->
+            <h2>FireTruck</h2>
+            
+            <!-- fusionner les forms ? -->
+            <h:form>
+                <h:commandButton value="FSC_connection_request" action="pages/firemen" >
+                    <f:actionListener binding="#{testApplication.FSC_connection_request()}" />
+                </h:commandButton>
+            </h:form>
+        </div>
+        
+        <div class="right" style="float: right">
+            <h2>PoliceVehicle</h2>
+
+            <h:form>
+                <h:commandButton value="PSC_connection_request" action="pages/policemen">
+                    <f:actionListener binding="#{testApplication.PSC_connection_request()}" />
+                </h:commandButton>
+            </h:form>
+        </div>
+        
+      
+        
+    </h:body>
+</html>
+
