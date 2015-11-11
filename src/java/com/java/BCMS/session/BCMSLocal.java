@@ -6,6 +6,7 @@
 package com.java.BCMS.session;
 
 import com.pauware.pauware_engine._Exception.Statechart_exception;
+import java.util.List;
 
 /**
  *
@@ -17,5 +18,5 @@ public interface BCMSLocal {
     void no_more_route_left() throws Statechart_exception;
     void crisis_is_more_severe() throws Statechart_exception;
     void crisis_is_less_severe() throws Statechart_exception;
-    javax.persistence.EntityManager getEntityManager();
+    List getRoutes();
 }

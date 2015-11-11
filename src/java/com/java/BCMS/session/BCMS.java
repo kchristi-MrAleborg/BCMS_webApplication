@@ -9,6 +9,8 @@ import javax.ejb.Singleton;
 import com.pauware.pauware_engine._Core.*;
 import com.pauware.pauware_engine._Exception.*;
 import com.pauware.pauware_engine._Java_EE.*;
+import java.util.ArrayList;
+import java.util.List;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 import javax.annotation.PostConstruct;
@@ -889,11 +891,7 @@ public class BCMS extends Timer_monitor implements FSC_Remote, PSC_Remote {
     private EventBeanLocal event;
     
     /// Methodes additionnelles  
-    
-    public javax.persistence.EntityManager getEntityManager(){
-        return _entity_manager;
-    }
-    
+       
     private void insertFireTruck(final String name){
         //this._entity_manager.getTransaction().begin();
         com.java.BCMS.entity.BcmsSessionFireTruck fireTruck = new com.java.BCMS.entity.BcmsSessionFireTruck(_sessionId, name);
@@ -939,6 +937,15 @@ public class BCMS extends Timer_monitor implements FSC_Remote, PSC_Remote {
         //this._entity_manager.getTransaction().commit();
     }
     
+    @Override
+    public List getRoutes(){
+        List res;
+        
+        javax.persistence.Query query = _entity_manager.createNamedQuery("Route.findAll");
+        res =  query.getResultList();
+        
+        return res;
+    }
     
     @TransactionAttribute(TransactionAttributeType.REQUIRED)
     private void insertEvent_Transaction (final String name, final String trace){
