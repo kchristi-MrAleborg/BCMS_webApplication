@@ -71,5 +71,9 @@ public class PolicemenApp {
     public void police_vehicle_arrived(String name) throws Statechart_exception{    
         psc_bCMS.police_vehicle_arrived(name);
     } 
+    
+    public void reset() throws Statechart_exception{    
+        psc_bCMS.reset();
+    }
         
 }

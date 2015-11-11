@@ -81,5 +81,9 @@ public class FiremenApp {
     public void fire_truck_arrived(String name) throws Statechart_exception{    
         fsc_bCMS.fire_truck_arrived(name);
     }  
+    
+    public void reset() throws Statechart_exception{    
+        fsc_bCMS.reset();
+    }
         
 }
