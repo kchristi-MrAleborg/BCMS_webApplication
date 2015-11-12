@@ -11,11 +11,11 @@
         <h2>Policemen</h2>
         <h:form>
             <h:inputText binding="#{police_vehicle_number}"/> <!-- Garde : Maximum autorisé = maximum dans la base ? -->
-            <h:commandButton value="state_police_vehicle_number" action="#{testApplication.state_police_vehicle_number(police_vehicle_number.value)}"/>
+            <h:commandButton value="state_police_vehicle_number" action="#{policemenApp.state_police_vehicle_number(police_vehicle_number.value)}"/>
         </h:form> 
         <h:form>
             <h:selectOneMenu value="#{chosenRoute}" >
-                <f:selectItems value="#{firemenApp.getRoutes()}" />
+                <f:selectItems value="#{policemenApp.getRoutes()}" />
             </h:selectOneMenu>
         </h:form>
     </h:body>

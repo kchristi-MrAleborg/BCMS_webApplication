@@ -10,7 +10,7 @@
         <h2>Firemen</h2>
         <h:form>
             <h:inputText binding="#{fire_truck_number}"/> <!-- Garde : Maximum autorisé = maximum dans la base ? -->
-            <h:commandButton value="state_fire_truck_number" action="#{testApplication.state_fire_truck_number(fire_truck_number.value)}"/>
+            <h:commandButton value="state_fire_truck_number" action="#{firemenApp.state_fire_truck_number(fire_truck_number.value)}"/>
         </h:form>
         
         <h:form>
