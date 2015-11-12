@@ -947,6 +947,8 @@ public class BCMS extends Timer_monitor implements FSC_Remote, PSC_Remote {
         return res;
     }
     
+    
+    
     @TransactionAttribute(TransactionAttributeType.REQUIRED)
     private void insertEvent_Transaction (final String name, final String trace){
         java.text.DateFormat format = new java.text.SimpleDateFormat("yyyy/MM/dd HH:mm:ss:SSS");
