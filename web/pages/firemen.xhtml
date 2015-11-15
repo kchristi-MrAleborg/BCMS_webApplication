@@ -7,43 +7,62 @@
       xmlns:p="http://primefaces.org/ui" >
     <h:head>
         <title>Firemen</title>
+        <link type="text/css" rel="stylesheet" href="../CSS/WebApp.css" />
     </h:head>
     <h:body>
+        
         <h2>Firemen</h2>
-        <h:form>
-            <h:outputText id="ft_nb_out" value="Set fire truck number to #{environment.fireTruckNumber}"/> <!-- Garde : Maximum autorisé = maximum dans la base ? -->
-            <h:inputHidden id="ft_nb" value="#{environment.fireTruckNumber}" />
-            <p:slider for="ft_nb" display="ft_nb_out" style="width: 200px" displayTemplate="Set fire truck number to {value}" maxValue="${firemenApp.maxFTNumber}" />
-            <h:commandButton value="state_fire_truck_number" action="#{firemenApp.state_fire_truck_number(fire_truck_number.value)}"/>
+        <h:form id="ft_nb_form" style="visibility: #{environment.policemenConnected and environment.firemenConnected ? 'block' : 'collapse'}">
+            <h:panelGrid id="ft_nb_panel">
+                <h3>Fire truck number</h3>
+                <h:outputText id="ft_nb_out" value="Set fire truck number to #{environment.fireTruckNumber}" /> <!-- Garde : Maximum autorisé = maximum dans la base ? -->
+                <h:inputHidden id="ft_nb" value="#{environment.fireTruckNumber}" />
+                <p:slider for="ft_nb" display="ft_nb_out" style="width: 200px" displayTemplate="Set fire truck number to {value}" maxValue="${firemenApp.maxFTNumber}" />
+                <h:commandButton value="state_fire_truck_number" action="#{firemenApp.state_fire_truck_number(fire_truck_number.value)}"/>
+            </h:panelGrid>
+            <p:poll interval="1" update="ft_nb_form" />
         </h:form>
         
-        <h:form>
-            <h3>Firemen route</h3>
-            <h:selectOneMenu id="chosen_route" value="#{chosenRoute}">
-                <f:selectItems value="#{firemenApp.getRoutes()}" />
-            </h:selectOneMenu>
-            <h:commandButton value="select_firemen_route"  action="#{environment.setFiremenRoute(chosenRoute)}" >
-                <f:actionListener binding="#{firemenApp.route_for_fire_trucks(chosenRoute)}" />
-                <f:ajax execute="chosen_route" render="selfRoute_firemen" />
-            </h:commandButton>
+        <h:form id="ft_route_form" style="visibility: #{environment.fireTruckNumber != 0 ? 'block' : 'collapse'}">
+            <h:panelGrid id="ft_route_panel">
+                <h3>Firemen route</h3>
+                <h:selectOneMenu id="chosen_route" value="#{chosenRoute}" disabled="${environment.fireTruckRouteAccepted}" >
+                    <f:selectItems value="#{firemenApp.getRoutes()}" />
+                </h:selectOneMenu>
+                <h:commandButton value="select_firemen_route"  action="#{environment.setFiremenRoute(chosenRoute)}" disabled="${environment.fireTruckRouteAccepted}" >
+                    <f:actionListener binding="#{firemenApp.route_for_fire_trucks(chosenRoute)}" />
+                    <f:ajax execute="chosen_route" render="selfRoute_firemen" />
+                </h:commandButton>
+
+                Your route : <h:outputText id='selfRoute_firemen' value="#{environment.firemenRoute != null ? environment.firemenRoute : ''}" />
+
+                <br />
+                <h:commandButton value="Agree about fire truck route" action="#{firemenApp.FSC_agrees_about_fire_truck_route()}"  disabled="${environment.fireTruckRouteAccepted or (environment.firemenRoute == null)}" >
+                    <f:actionListener binding="#{environment.firemenRouteAccepted()}" />
+                </h:commandButton>
+                <h:commandButton value="Disagree about fire truck route" action="#{firemenApp.FSC_disagrees_about_fire_truck_route()}" disabled="${environment.firemenRoute == null}" >
+                    <f:actionListener binding="#{environment.firemenRouteRefused()}" />
+                </h:commandButton>
+
+                <br /><h3>Policemen route : 
+                <h:outputText id="policeroute" value="#{environment.policemenRoute != null ? environment.policemenRoute : 'Waiting for policemen\'s route'}" />
+                <p:poll interval="${1}" update="policeroute" /></h3> 
+
+                <br />
+
+                <h:commandButton value="Agree about police vehicle route" action="#{firemenApp.FSC_agrees_about_police_vehicle_route()}" disabled="${environment.policeVehicleRouteAccepted or (environment.policemenRoute == null)}" >
+                    <f:actionListener binding="#{environment.policemenRouteAccepted()}" />
+                </h:commandButton>
+                <h:commandButton value="Disagree about police vehicle route" action="#{firemenApp.FSC_disagrees_about_police_vehicle_route()}" disabled="${environment.policemenRoute == null}" >
+                    <f:actionListener binding="#{environment.firemenRouteRefused()}" />
+                </h:commandButton>
+            </h:panelGrid>
+            <p:poll interval="${1}" update="ft_route_panel" />
+            <p:poll interval="${1}" update="ft_route_form" />
             
-            Your route : <h:outputText id='selfRoute_firemen' value="#{environment.firemenRoute != null ? environment.firemenRoute : ''}" />
-            
-            <br />
-            <h:commandButton value="Agree about fire truck route" action="#{firemenApp.FSC_agrees_about_fire_truck_route()}" />
-            <h:commandButton value="Disagree about fire truck route" action="#{firemenApp.FSC_disagrees_about_fire_truck_route()}" />
-            
-            <br />Policemen route : 
-            <h:outputText id="policeroute" value="#{environment.policemenRoute != null ? environment.policemenRoute : 'Waiting for policemen\'s route'}" />
-            <p:poll interval="${1}" update="policeroute" />
-            
-            <br />
-            
-            <h:commandButton value="Agree about police vehicle route" action="#{firemenApp.FSC_agrees_about_police_vehicle_route()}" />
-            <h:commandButton value="Disagree about police vehicle route" action="#{firemenApp.FSC_disagrees_about_police_vehicle_route()}" />
-            
-            <br />
         </h:form>
+        
+        
            
         
         

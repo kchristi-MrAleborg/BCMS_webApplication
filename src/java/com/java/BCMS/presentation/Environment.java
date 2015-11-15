@@ -21,8 +21,15 @@ public class Environment {
     
     private static String firemenRoute = null;
     private static String policemenRoute = null;
-    private static int fire_truck_number;
-    private static int police_vehicle_number;
+    private static int fire_truck_number = 0;
+    private static int police_vehicle_number = 0;
+    private static boolean fire_truck_route_accepted = false;
+    private static boolean police_vehicle_route_accepted = false;
+    private static boolean firemenConnected = false;
+    private static boolean policemenConnected = false;
+    
+    protected String chosenRoute;
+    
     
     
     /**
@@ -63,6 +70,54 @@ public class Environment {
     
     public String getPolicemenRoute(){
         return policemenRoute;
+    }
+    
+    public boolean getFireTruckRouteAccepted(){
+        return fire_truck_route_accepted;
+    }
+    
+    public void setFireTruckRouteAccepted(boolean b){
+        fire_truck_route_accepted = b;
+    }
+    
+    public boolean getPoliceVehicleRouteAccepted(){
+        return police_vehicle_route_accepted;
+    }
+    
+    public void setPoliceVehicleRouteAccepted(boolean b){
+        police_vehicle_route_accepted = b;
+    }
+    
+    public void firemenRouteAccepted(){
+        setFireTruckRouteAccepted(true);
+    }
+    
+    public void firemenRouteRefused(){
+        setFireTruckRouteAccepted(false);
+    }
+    
+    public void policemenRouteAccepted(){
+        setPoliceVehicleRouteAccepted(true);
+    }
+    
+    public void policemenRouteRefused(){
+        setPoliceVehicleRouteAccepted(false);
+    }
+    
+    public boolean getFiremenConnected(){
+        return firemenConnected;
+    }
+    
+    public void setFiremenConnected(boolean b){
+        firemenConnected = b;
+    }
+    
+    public boolean getPolicemenConnected(){
+        return policemenConnected;
+    }
+    
+    public void setPolicemenConnected(boolean b){
+        policemenConnected = b;
     }
     
 }

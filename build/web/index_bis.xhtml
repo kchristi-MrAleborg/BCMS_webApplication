@@ -23,6 +23,7 @@
             <h:form>
                 <h:commandButton value="FSC_connection_request" action="pages/firemen" >
                     <f:actionListener binding="#{firemenApp.FSC_connection_request()}" />
+                    <f:actionListener binding="#{environment.setFiremenConnected(true)}" />
                 </h:commandButton>
             </h:form>
         </div>
@@ -33,6 +34,7 @@
             <h:form>
                 <h:commandButton value="PSC_connection_request" action="pages/policemen">
                     <f:actionListener binding="#{policemenApp.PSC_connection_request()}" />
+                    <f:actionListener binding="#{environment.setPolicemenConnected(true)}" />
                 </h:commandButton>
             </h:form>
         </div>
