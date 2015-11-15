@@ -19,6 +19,10 @@ public class Environment {
 
     private static String var1 = null;
     
+    private static String firemenRoute = null;
+    private static String policemenRoute = null;
+    
+    
     /**
      * Creates a new instance of Environment
      */
@@ -32,6 +36,24 @@ public class Environment {
     
     public String getVar(){
         return var1;
+    }
+    
+    public void setFiremenRoute(String s){
+        //firemenRoute = new String();
+        firemenRoute = s;
+    }
+    
+    public void setPolicemenRoute(String s){
+        //policemenRoute=new String();
+        policemenRoute = s;
+    }
+    
+    public String getFiremenRoute(){
+        return firemenRoute;
+    }
+    
+    public String getPolicemenRoute(){
+        return policemenRoute;
     }
     
 }

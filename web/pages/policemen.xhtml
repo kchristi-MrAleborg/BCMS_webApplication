@@ -15,17 +15,17 @@
             <h:commandButton value="state_police_vehicle_number" action="#{policemenApp.state_police_vehicle_number(police_vehicle_number.value)}"/>
         </h:form> 
         <h:form>
-            <h:selectOneMenu value="#{chosenRoute}" >
+            <h3>Policemen route</h3>
+            <h:selectOneMenu value="#{chosenRoute}" binding="#{chosenRoute}">
                 <f:selectItems value="#{policemenApp.getRoutes()}" />
+                <!--<f:valueChangeListener binding="#{environment.setPolicemenRoute(chosenRoute)}" /> -->
             </h:selectOneMenu>
+            <h:commandButton value="select_policemen_route" action="#{environment.setPolicemenRoute(chosenRoute)}" />
+        
+            <br />Firemen route : 
+            <h:outputText id="firemenroute" value="#{environment.firemenRoute != null ? environment.firemenRoute : 'Waiting for firemen\'s route'}" />
+            <p:poll interval="${1}" update="firemenroute" />
         </h:form>
-        
-        <h:form>
-            <h:outputText id="outputText" value="#{environment.var != null ? environment.var : 'perdu'}" />
-            <p:poll update="outputText" interval="${1}" />
-        </h:form>
-        
-        
         
     </h:body>
 </html>
