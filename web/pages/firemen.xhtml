@@ -19,12 +19,12 @@
         
         <h:form>
             <h3>Firemen route</h3>
-            <h:selectOneMenu value="#{chosenRoute}">
+            <h:selectOneMenu id="chosen_route" value="#{chosenRoute}">
                 <f:selectItems value="#{firemenApp.getRoutes()}" />
-                <!--<f:valueChangeListener binding="#{environment.setFiremenRoute(chosenRoute)}" />-->
             </h:selectOneMenu>
-            <h:commandButton id='submit_route' value="select_firemen_route"  action="#{environment.setFiremenRoute(chosenRoute)}" >
+            <h:commandButton value="select_firemen_route"  action="#{environment.setFiremenRoute(chosenRoute)}" >
                 <f:actionListener binding="#{firemenApp.route_for_fire_trucks(chosenRoute)}" />
+                <f:ajax execute="chosen_route" render="selfRoute_firemen" />
             </h:commandButton>
             
             Your route : <h:outputText id='selfRoute_firemen' value="#{environment.firemenRoute != null ? environment.firemenRoute : ''}" />
@@ -32,6 +32,8 @@
             <br />Policemen route : 
             <h:outputText id="policeroute" value="#{environment.policemenRoute != null ? environment.policemenRoute : 'Waiting for policemen\'s route'}" />
             <p:poll interval="${1}" update="policeroute" />
+            
+            
         </h:form>
            
         
