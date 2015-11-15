@@ -11,7 +11,9 @@
     <h:body>
         <h2>Firemen</h2>
         <h:form>
-            <h:inputText binding="#{fire_truck_number}"/> <!-- Garde : Maximum autorisé = maximum dans la base ? -->
+            <h:outputText id="ft_nb_out" value="Set fire truck number to #{environment.fireTruckNumber}"/> <!-- Garde : Maximum autorisé = maximum dans la base ? -->
+            <h:inputHidden id="ft_nb" value="#{environment.fireTruckNumber}" />
+            <p:slider for="ft_nb" display="ft_nb_out" style="width: 200px" displayTemplate="Set fire truck number to {value}" maxValue="${firemenApp.maxFTNumber}" />
             <h:commandButton value="state_fire_truck_number" action="#{firemenApp.state_fire_truck_number(fire_truck_number.value)}"/>
         </h:form>
         
@@ -31,14 +33,8 @@
             <h:outputText id="policeroute" value="#{environment.policemenRoute != null ? environment.policemenRoute : 'Waiting for policemen\'s route'}" />
             <p:poll interval="${1}" update="policeroute" />
         </h:form>
-                
-        <h:form>
-            <h:commandButton id="inputText" value="test" action="${environment.setVar()}" />
-        </h:form>
+           
         
-        <h:form>
-            <h:inputText value="#{environment.var}" />
-        </h:form>
         
     </h:body>
 </html>

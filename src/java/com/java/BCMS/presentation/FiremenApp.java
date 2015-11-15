@@ -85,5 +85,9 @@ public class FiremenApp {
     public void reset() throws Statechart_exception{    
         fsc_bCMS.reset();
     }
+    
+    public int getMaxFTNumber(){
+        return fsc_bCMS.getMaxFTNumber();
+    }
         
 }

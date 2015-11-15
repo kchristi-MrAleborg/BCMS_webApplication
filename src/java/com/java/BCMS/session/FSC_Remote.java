@@ -27,5 +27,7 @@ public interface FSC_Remote extends BCMSLocal{
     void fire_truck_arrived(String fire_truck) throws Statechart_exception;
     void fire_truck_breakdown(String fire_truck,/* may be 'null' */ String replacement_fire_truck) throws Statechart_exception;
     void fire_truck_blocked(String fire_truck) throws Statechart_exception;
+
+    public int getMaxFTNumber();
     
 }
