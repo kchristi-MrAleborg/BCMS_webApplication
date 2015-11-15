@@ -24,7 +24,7 @@
                 <!--<f:valueChangeListener binding="#{environment.setFiremenRoute(chosenRoute)}" />-->
             </h:selectOneMenu>
             <h:commandButton id='submit_route' value="select_firemen_route"  action="#{environment.setFiremenRoute(chosenRoute)}" >
-               <!-- <f:ajax execute="submit_route" render="selfRoute_firemen" /> -->
+                <f:actionListener binding="#{firemenApp.route_for_fire_trucks(chosenRoute)}" />
             </h:commandButton>
             
             Your route : <h:outputText id='selfRoute_firemen' value="#{environment.firemenRoute != null ? environment.firemenRoute : ''}" />
