@@ -22,6 +22,7 @@ public class Environment {
     private static String firemenRoute = null;
     private static String policemenRoute = null;
     private static int fire_truck_number;
+    private static int police_vehicle_number;
     
     
     /**
@@ -36,6 +37,14 @@ public class Environment {
  
     public void setFireTruckNumber(int n) {
         fire_truck_number = n;
+    }
+    
+    public int getPoliceVehicleNumber(){
+        return police_vehicle_number;
+    }
+    
+    public void setPoliceVehicleNumber(int n){
+        police_vehicle_number = n;
     }
     
     public void setFiremenRoute(String s){

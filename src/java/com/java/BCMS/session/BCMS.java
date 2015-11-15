@@ -953,32 +953,11 @@ public class BCMS extends Timer_monitor implements FSC_Remote, PSC_Remote {
         return (query.getResultList()).size();
     }
     
-    
-    @TransactionAttribute(TransactionAttributeType.REQUIRED)
-    private void insertEvent_Transaction (final String name, final String trace){
-        java.text.DateFormat format = new java.text.SimpleDateFormat("yyyy/MM/dd HH:mm:ss:SSS");
-        java.util.Date date = new java.util.Date();
-        
-        System.out.println("InsertEvent_Transaction");
-        
-        com.java.BCMS.entity.Event event = new com.java.BCMS.entity.Event(new com.java.BCMS.entity.EventPK(name, (format.format(date)).toString()));
-        event.setSessionId(this._bcmsSession);
-        event.setExecutionTrace(trace);
-        try{
-            this._entity_manager.joinTransaction();
-            this._entity_manager.getTransaction().begin();
-            this._entity_manager.persist(event);
-            this._entity_manager.getTransaction().commit();
-        }
-        catch(javax.persistence.TransactionRequiredException e){
-            System.err.println("javax.persistence.TransactionRequiredException");
-            e.printStackTrace();
-        }
-        catch(Exception e){
-            System.err.println("Exception");
-            e.printStackTrace();
-        }
+    @Override
+    public int getMaxPVNumber(){
+        javax.persistence.Query query = _entity_manager.createNamedQuery("PoliceVehicle.findAll");
+        return (query.getResultList()).size();
     }
-    
+        
     public enum vehicleState{ Idle, Dispatched, Arrived, Blocked, Breakdown }
 }

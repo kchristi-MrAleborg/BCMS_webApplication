@@ -22,5 +22,7 @@ public interface PSC_Remote extends BCMSLocal{
     void police_vehicle_arrived(String police_vehicle) throws Statechart_exception;
     void police_vehicle_breakdown(String police_vehicle,/* may be 'null' */ String replacement_police_vehicle) throws Statechart_exception;
     void police_vehicle_blocked(String police_vehicle) throws Statechart_exception;
+
+    int getMaxPVNumber();
     
 }

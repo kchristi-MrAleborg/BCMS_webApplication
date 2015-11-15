@@ -11,7 +11,9 @@
     <h:body>
         <h2>Policemen</h2>
         <h:form>
-            <h:inputText binding="#{police_vehicle_number}"/> <!-- Garde : Maximum autorisé = maximum dans la base ? -->
+            <h:outputText id="pv_nb_out" value="#{environment.policeVehicleNumber}"/> <!-- Garde : Maximum autorisé = maximum dans la base ? -->
+            <h:inputHidden id="pv_nb" value="#{environment.policeVehicleNumber}" />
+            <p:slider for="pv_nb" display="pv_nb_out" style="width: 200px" displayTemplate="Set police vehicle number to {value}" maxValue="${policemenApp.maxPVNumber}" />
             <h:commandButton value="state_police_vehicle_number" action="#{policemenApp.state_police_vehicle_number(police_vehicle_number.value)}"/>
         </h:form> 
         <h:form>

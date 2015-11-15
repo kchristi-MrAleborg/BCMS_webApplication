@@ -75,5 +75,9 @@ public class PolicemenApp {
     public void reset() throws Statechart_exception{    
         psc_bCMS.reset();
     }
+    
+    public int getMaxPVNumber(){
+        return psc_bCMS.getMaxPVNumber();
+    }
         
 }
