@@ -12,7 +12,7 @@
     <h:body>
         
         <h2>Firemen</h2>
-        <h:form id="ft_nb_form" style="visibility: #{environment.policemenConnected and environment.firemenConnected ? 'block' : 'collapse'}">
+        <h:form id="ft_nb_form" style="visibility: #{environment.policemenConnected and environment.firemenConnected ? 'block' : 'collapse'}" >
             <h:panelGrid id="ft_nb_panel">
                 <h3>Fire truck number</h3>
                 <h:outputText id="ft_nb_out" value="Set fire truck number to #{environment.fireTruckNumber}" /> <!-- Garde : Maximum autorisé = maximum dans la base ? -->
@@ -57,11 +57,16 @@
                     <f:actionListener binding="#{environment.firemenRouteRefused()}" />
                 </h:commandButton>
             </h:panelGrid>
-            <p:poll interval="${1}" update="ft_route_panel" />
             <p:poll interval="${1}" update="ft_route_form" />
-            
         </h:form>
         
+        <h:form id="ft_dispatching_form" style="visibility: #{environment.fireTruckRouteAccepted and environment.policeVehicleRouteAccepted ? 'block' : 'collapse'}">
+            <h:panelGrid id="ft_dispatching_panel" >
+                <h3>Dispatching</h3>
+                
+            </h:panelGrid>
+            <p:poll interval="${1}" update="ft_dispatching_form" />
+        </h:form>
         
            
         

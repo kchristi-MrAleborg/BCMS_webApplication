@@ -6,6 +6,7 @@
 package com.java.BCMS.session;
 
 import com.pauware.pauware_engine._Exception.Statechart_exception;
+import java.util.List;
 
 /**
  *
@@ -29,5 +30,6 @@ public interface FSC_Remote extends BCMSLocal{
     void fire_truck_blocked(String fire_truck) throws Statechart_exception;
 
     public int getMaxFTNumber();
+    public List getFireTrucks();
     
 }

@@ -948,6 +948,18 @@ public class BCMS extends Timer_monitor implements FSC_Remote, PSC_Remote {
     }
     
     @Override
+    public List getFireTrucks(){
+        javax.persistence.Query query = _entity_manager.createNamedQuery("FireTruck.findAll");
+        return query.getResultList();
+    }
+    
+    @Override
+    public List getPoliceVehicles(){
+        javax.persistence.Query query = _entity_manager.createNamedQuery("PoliceVehicle.findAll");
+        return query.getResultList();
+    }
+    
+    @Override
     public int getMaxFTNumber(){
         javax.persistence.Query query = _entity_manager.createNamedQuery("FireTruck.findAll");
         return (query.getResultList()).size();

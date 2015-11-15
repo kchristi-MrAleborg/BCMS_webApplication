@@ -26,6 +26,8 @@ public class FiremenApp {
     protected com.java.BCMS.session.FSC_Remote fsc_bCMS;
     
     javax.faces.model.SelectItem[] routes;
+    javax.faces.model.SelectItem[] firetrucks;
+    javax.faces.model.SelectItem[] policevehicles;
     
     /**
      * Creates a new instance of FiremenApp
@@ -43,11 +45,24 @@ public class FiremenApp {
         {
             routes[i]=new SelectItem(((com.java.BCMS.entity.Route)l.get(i)).getRouteName(), ((com.java.BCMS.entity.Route)l.get(i)).getRouteName());
         }
+        
+        l = null;
+        l = fsc_bCMS.getFireTrucks();
+        firetrucks = new SelectItem[l.size()];
+        for(int i=0; i<l.size(); i++)
+        {
+            firetrucks[i]=new SelectItem(((com.java.BCMS.entity.FireTruck)l.get(i)).getFireTruckName(), ((com.java.BCMS.entity.FireTruck)l.get(i)).getFireTruckName());
+        }
     }
     
     public javax.faces.model.SelectItem[] getRoutes()
     {
         return routes;
+    }
+    
+    public javax.faces.model.SelectItem[] getFireTrucks()
+    {
+        return firetrucks;
     }
     
     public void FSC_connection_request() throws Statechart_exception{
