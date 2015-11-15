@@ -29,11 +29,20 @@
             
             Your route : <h:outputText id='selfRoute_firemen' value="#{environment.firemenRoute != null ? environment.firemenRoute : ''}" />
             
+            <br />
+            <h:commandButton value="Agree about fire truck route" action="#{firemenApp.FSC_agrees_about_fire_truck_route()}" />
+            <h:commandButton value="Disagree about fire truck route" action="#{firemenApp.FSC_disagrees_about_fire_truck_route()}" />
+            
             <br />Policemen route : 
             <h:outputText id="policeroute" value="#{environment.policemenRoute != null ? environment.policemenRoute : 'Waiting for policemen\'s route'}" />
             <p:poll interval="${1}" update="policeroute" />
             
+            <br />
             
+            <h:commandButton value="Agree about police vehicle route" action="#{firemenApp.FSC_agrees_about_police_vehicle_route()}" />
+            <h:commandButton value="Disagree about police vehicle route" action="#{firemenApp.FSC_disagrees_about_police_vehicle_route()}" />
+            
+            <br />
         </h:form>
            
         

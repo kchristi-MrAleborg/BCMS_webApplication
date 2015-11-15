@@ -64,7 +64,11 @@ public class FiremenApp {
     
     public void FSC_disagrees_about_fire_truck_route() throws Statechart_exception{    
         fsc_bCMS.FSC_disagrees_about_fire_truck_route();
-    }  
+    }
+    
+    public void FSC_disagrees_about_police_vehicle_route() throws Statechart_exception{    
+        fsc_bCMS.FSC_disagrees_about_police_vehicle_route();
+    } 
     
     public void FSC_agrees_about_police_vehicle_route() throws Statechart_exception{    
         fsc_bCMS.FSC_agrees_about_police_vehicle_route();
