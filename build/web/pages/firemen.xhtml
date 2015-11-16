@@ -63,7 +63,10 @@
         <h:form id="ft_dispatching_form" style="visibility: #{environment.fireTruckRouteAccepted and environment.policeVehicleRouteAccepted ? 'block' : 'collapse'}">
             <h:panelGrid id="ft_dispatching_panel" >
                 <h3>Dispatching</h3>
-                
+                <h:selectOneMenu id="dispatched_truck" value="#{truckToDispatch}" disabled="${environment}" >
+                    <f:selectItems value="#{firemenApp.fireTrucks}" />
+                </h:selectOneMenu>
+                <h:commandButton value="Dispatch" action="#{firemenApp.fire_truck_dispatched(truckToDispatch)}" />
             </h:panelGrid>
             <p:poll interval="${1}" update="ft_dispatching_form" />
         </h:form>
