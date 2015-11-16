@@ -6,12 +6,17 @@
 package com.java.BCMS.presentation;
 
 import com.pauware.pauware_engine._Exception.Statechart_exception;
+import java.io.Serializable;
+import java.util.ArrayList;
+import java.util.Arrays;
 //import java.util.ArrayList;
 import java.util.List;
 import javax.annotation.PostConstruct;
 //import javax.annotation.PostConstruct;
 import javax.inject.Named;
 import javax.enterprise.context.RequestScoped;
+import javax.faces.bean.ApplicationScoped;
+import javax.faces.bean.SessionScoped;
 import javax.faces.model.SelectItem;
 
 /**
@@ -20,14 +25,15 @@ import javax.faces.model.SelectItem;
  */
 @Named(value = "firemenApp")
 @RequestScoped
-public class FiremenApp {
+public class FiremenApp implements Serializable{
     
     @javax.ejb.EJB
     protected com.java.BCMS.session.FSC_Remote fsc_bCMS;
     
-    javax.faces.model.SelectItem[] routes;
-    javax.faces.model.SelectItem[] firetrucks;
-    javax.faces.model.SelectItem[] policevehicles;
+    private static javax.faces.model.SelectItem[] routes;
+    private static javax.faces.model.SelectItem[] firetrucks;
+    private static javax.faces.model.SelectItem[] availableFireTrucks;
+    private static java.util.ArrayList dispatchedFireTrucks;
     
     /**
      * Creates a new instance of FiremenApp
@@ -35,34 +41,33 @@ public class FiremenApp {
     public FiremenApp() {
         
     }
-            
-    @PostConstruct
-    public void init(){
-        
+    
+    public javax.faces.model.SelectItem[] getRoutes()
+    {
         List l = fsc_bCMS.getRoutes(); 
         routes = new SelectItem[l.size()];
         for(int i=0; i<l.size(); i++)
         {
             routes[i]=new SelectItem(((com.java.BCMS.entity.Route)l.get(i)).getRouteName(), ((com.java.BCMS.entity.Route)l.get(i)).getRouteName());
         }
-        
-        l = null;
+        return routes;
+    }
+    
+    public javax.faces.model.SelectItem[] getFireTrucks()
+    {
+        List l;
         l = fsc_bCMS.getFireTrucks();
         firetrucks = new SelectItem[l.size()];
         for(int i=0; i<l.size(); i++)
         {
             firetrucks[i]=new SelectItem(((com.java.BCMS.entity.FireTruck)l.get(i)).getFireTruckName(), ((com.java.BCMS.entity.FireTruck)l.get(i)).getFireTruckName());
         }
-    }
-    
-    public javax.faces.model.SelectItem[] getRoutes()
-    {
-        return routes;
-    }
-    
-    public javax.faces.model.SelectItem[] getFireTrucks()
-    {
         return firetrucks;
+    }
+    
+    public javax.faces.model.SelectItem[] getAvailableFireTrucks()
+    {
+        return availableFireTrucks;
     }
     
     public void FSC_connection_request() throws Statechart_exception{
@@ -108,5 +113,9 @@ public class FiremenApp {
     public int getMaxFTNumber(){
         return fsc_bCMS.getMaxFTNumber();
     }
-        
+    
+    public void fire_truck_blocked(String fire_truck) throws Statechart_exception{
+        fsc_bCMS.fire_truck_blocked(fire_truck);
+    }
+    
 }

@@ -5,9 +5,15 @@
  */
 package com.java.BCMS.presentation;
 
+import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.List;
+import javax.annotation.PostConstruct;
 import javax.inject.Named;
 import javax.enterprise.context.ApplicationScoped;
 import javax.enterprise.context.Dependent;
+import javax.faces.bean.ManagedProperty;
+import javax.faces.model.SelectItem;
 
 /**
  *
@@ -16,8 +22,7 @@ import javax.enterprise.context.Dependent;
 @Named(value = "environment")
 @ApplicationScoped
 public class Environment {
-
-    private static String var1 = null;
+    
     
     private static String firemenRoute = null;
     private static String policemenRoute = null;
@@ -27,6 +32,10 @@ public class Environment {
     private static boolean police_vehicle_route_accepted = false;
     private static boolean firemenConnected = false;
     private static boolean policemenConnected = false;
+    private static boolean fireTruckNumberSet = false; 
+    private static java.util.ArrayList dispatchedFireTrucks;
+    private static javax.faces.model.SelectItem[] firetrucks;
+    private static javax.faces.model.SelectItem[] availableFireTrucks;
     
     protected String chosenRoute;
     
@@ -36,6 +45,54 @@ public class Environment {
      * Creates a new instance of Environment
      */
     public Environment() {
+    }
+        
+    @PostConstruct
+    public void init(){
+        String firemenRoute = null;
+        String policemenRoute = null;
+        int fire_truck_number = 0;
+        int police_vehicle_number = 0;
+        boolean fire_truck_route_accepted = false;
+        boolean police_vehicle_route_accepted = false;
+        boolean firemenConnected = false;
+        boolean policemenConnected = false;
+        boolean fireTruckNumberSet = false;
+    }
+    
+    public void removeInAvalableFireTrucks(String ft){
+        List<javax.faces.model.SelectItem> l = new java.util.ArrayList(availableFireTrucks.length);
+        l.addAll(Arrays.asList(availableFireTrucks));
+        availableFireTrucks = null;
+        
+        for(int i=0; i<l.size(); i++){
+            if(((String)(l.get(i)).getValue()) == null ? ft == null : ((String)(l.get(i)).getValue()).equals(ft))
+                l.remove(i);
+        }
+        
+        availableFireTrucks = new javax.faces.model.SelectItem[l.size()];
+        for(int i = 0; i < l.size(); i++){
+            availableFireTrucks[i] = new SelectItem(((String)(l.get(i)).getValue()));
+        }
+    }
+    
+    public void addInDispatchedFireTrucks(String ft){
+        if(dispatchedFireTrucks == null)
+            dispatchedFireTrucks = new ArrayList();
+        dispatchedFireTrucks.add(ft);
+    }
+    
+    public ArrayList getDispatchedFireTrucks(){
+        return dispatchedFireTrucks;
+    }
+    
+    public javax.faces.model.SelectItem[] getAvailableFireTrucks(){
+        return availableFireTrucks;
+    }
+    
+    public javax.faces.model.SelectItem[] getAvailableFireTrucks(javax.faces.model.SelectItem[] ft){
+        availableFireTrucks = ft;
+        return availableFireTrucks;
     }
     
     public int getFireTruckNumber() {
@@ -118,6 +175,14 @@ public class Environment {
     
     public void setPolicemenConnected(boolean b){
         policemenConnected = b;
+    }
+    
+    public boolean getFireTruckNumberSet(){
+        return fireTruckNumberSet;
+    }
+    
+    public void setFireTruckNumberSet(boolean b){
+        fireTruckNumberSet = b;
     }
     
 }

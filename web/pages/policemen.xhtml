@@ -18,9 +18,8 @@
         </h:form> 
         <h:form>
             <h3>Policemen route</h3>
-            <h:selectOneMenu value="#{chosenRoute}" binding="#{chosenRoute}">
+            <h:selectOneMenu value="#{chosenRoute}">
                 <f:selectItems value="#{policemenApp.getRoutes()}" />
-                <!--<f:valueChangeListener binding="#{environment.setPolicemenRoute(chosenRoute)}" /> -->
             </h:selectOneMenu>
             <h:commandButton value="select_policemen_route" action="#{environment.setPolicemenRoute(chosenRoute)}" />
         
