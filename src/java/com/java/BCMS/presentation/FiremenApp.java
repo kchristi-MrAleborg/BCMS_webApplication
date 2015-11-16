@@ -118,4 +118,8 @@ public class FiremenApp implements Serializable{
         fsc_bCMS.fire_truck_blocked(fire_truck);
     }
     
+    public void fire_truck_breakdown(String fire_truck,/* may be 'null' */ String replacement_fire_truck) throws Statechart_exception{
+        fsc_bCMS.fire_truck_breakdown(fire_truck, replacement_fire_truck);
+    }
+    
 }
