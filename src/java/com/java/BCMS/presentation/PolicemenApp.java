@@ -25,6 +25,7 @@ public class PolicemenApp {
     private com.java.BCMS.session.PSC_Remote psc_bCMS;
     
     javax.faces.model.SelectItem[] routes;
+    private static javax.faces.model.SelectItem[] policeVehicles;
     
     /**
      * Creates a new instance of PolicemenApp
@@ -64,8 +65,11 @@ public class PolicemenApp {
         psc_bCMS.police_vehicle_dispatched(name);
     }   
     
-    public void police_vehicle_breakdown(String name, String replacementName) throws Statechart_exception{    
-        psc_bCMS.police_vehicle_breakdown(name, replacementName);
+    public void police_vehicle_breakdown(String name, String replacementName) throws Statechart_exception{ 
+        if(!"".equals(replacementName))
+            psc_bCMS.police_vehicle_breakdown(name, replacementName);
+        else
+            psc_bCMS.police_vehicle_breakdown(name, null);
     } 
     
     public void police_vehicle_arrived(String name) throws Statechart_exception{    
@@ -78,6 +82,22 @@ public class PolicemenApp {
     
     public int getMaxPVNumber(){
         return psc_bCMS.getMaxPVNumber();
+    }
+    
+    public void police_vehicle_blocked(String s) throws Statechart_exception{
+        psc_bCMS.police_vehicle_blocked(s);
+    }
+    
+    public javax.faces.model.SelectItem[] getPoliceVehicles()
+    {
+        List l;
+        l = psc_bCMS.getPoliceVehicles();
+        policeVehicles = new SelectItem[l.size()];
+        for(int i=0; i<l.size(); i++)
+        {
+            policeVehicles[i]=new SelectItem(((com.java.BCMS.entity.PoliceVehicle)l.get(i)).getPoliceVehicleName(), ((com.java.BCMS.entity.PoliceVehicle)l.get(i)).getPoliceVehicleName());
+        }
+        return policeVehicles;
     }
         
 }

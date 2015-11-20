@@ -75,6 +75,8 @@ public class FiremenApp implements Serializable{
     }
     
     public void state_fire_truck_number(int number) throws Statechart_exception{
+        
+        System.out.println("============== FIRE TRUCK NUMBER " + number + " ==============");
         fsc_bCMS.state_fire_truck_number(number);
     }
         
@@ -98,8 +100,9 @@ public class FiremenApp implements Serializable{
         fsc_bCMS.FSC_agrees_about_fire_truck_route();
     } 
     
-    public void fire_truck_dispatched(String name) throws Statechart_exception{    
-        fsc_bCMS.fire_truck_dispatched(name);
+    public void fire_truck_dispatched(String name) throws Statechart_exception{   
+        System.out.println("============== FIRE TRUCK DISPATCHED " + name + " ==============");
+        fsc_bCMS.fire_truck_dispatched("name");
     }  
     
     public void fire_truck_arrived(String name) throws Statechart_exception{    
@@ -119,7 +122,10 @@ public class FiremenApp implements Serializable{
     }
     
     public void fire_truck_breakdown(String fire_truck,/* may be 'null' */ String replacement_fire_truck) throws Statechart_exception{
-        fsc_bCMS.fire_truck_breakdown(fire_truck, replacement_fire_truck);
+        if(!"".equals(replacement_fire_truck))
+            fsc_bCMS.fire_truck_breakdown(fire_truck, replacement_fire_truck);
+        else
+            fsc_bCMS.fire_truck_breakdown(fire_truck, null);
     }
     
 }

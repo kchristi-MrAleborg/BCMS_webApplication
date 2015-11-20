@@ -3,18 +3,19 @@
     <editor-bookmarks xmlns="http://www.netbeans.org/ns/editor-bookmarks/2" lastBookmarkId="0"/>
     <open-files xmlns="http://www.netbeans.org/ns/projectui-open-files/2">
         <group>
-            <file>file:/home/mraleborg/Documents/Cours/Master2TI/composants_et_services/BCMS_webApplication/web/pages/firemen.xhtml</file>
             <file>file:/home/mraleborg/Documents/Cours/Master2TI/composants_et_services/BCMS_webApplication/src/java/com/java/BCMS/session/PSC_Remote.java</file>
+            <file>file:/home/mraleborg/Documents/Cours/Master2TI/composants_et_services/BCMS_webApplication/web/index.xhtml</file>
             <file>file:/home/mraleborg/Documents/Cours/Master2TI/composants_et_services/BCMS_webApplication/web/CSS/WebApp.css</file>
             <file>file:/home/mraleborg/Documents/Cours/Master2TI/composants_et_services/BCMS_webApplication/src/java/com/java/BCMS/session/BCMS.java</file>
             <file>file:/home/mraleborg/Documents/Cours/Master2TI/composants_et_services/BCMS_webApplication/web/index_bis.xhtml</file>
             <file>file:/home/mraleborg/Documents/Cours/Master2TI/composants_et_services/BCMS_webApplication/src/java/com/java/BCMS/presentation/FiremenApp.java</file>
             <file>file:/home/mraleborg/Documents/Cours/Master2TI/composants_et_services/BCMS_webApplication/src/java/com/java/BCMS/presentation/PolicemenApp.java</file>
-            <file>file:/home/mraleborg/Documents/Cours/Master2TI/composants_et_services/BCMS_webApplication/src/java/com/java/BCMS/presentation/TestApplication.java</file>
             <file>file:/home/mraleborg/Documents/Cours/Master2TI/composants_et_services/BCMS_webApplication/src/java/com/java/BCMS/session/FSC_Remote.java</file>
             <file>file:/home/mraleborg/Documents/Cours/Master2TI/composants_et_services/BCMS_webApplication/web/pages/policemen.xhtml</file>
-            <file>file:/home/mraleborg/Documents/Cours/Master2TI/composants_et_services/BCMS_webApplication/src/java/com/java/BCMS/session/BCMSLocal.java</file>
             <file>file:/home/mraleborg/Documents/Cours/Master2TI/composants_et_services/BCMS_webApplication/src/java/com/java/BCMS/presentation/Environment.java</file>
+            <file>file:/home/mraleborg/Documents/Cours/Master2TI/composants_et_services/BCMS_webApplication/web/pages/firemen.xhtml</file>
+            <file>file:/home/mraleborg/Documents/Cours/Master2TI/composants_et_services/BCMS_webApplication/src/java/com/java/BCMS/presentation/TestApplication.java</file>
+            <file>file:/home/mraleborg/Documents/Cours/Master2TI/composants_et_services/BCMS_webApplication/src/java/com/java/BCMS/session/BCMSLocal.java</file>
         </group>
     </open-files>
 </project-private>

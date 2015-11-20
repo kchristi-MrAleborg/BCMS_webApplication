@@ -9,16 +9,17 @@
         <title>Firemen</title>
         <link type="text/css" rel="stylesheet" href="../CSS/WebApp.css" />
     </h:head>
-    <h:body>
+    <h:body id="page">
         
         <h2>Firemen</h2>
+        <h:panelGrid>    
         <h:form id="ft_nb_form" style="visibility: #{environment.policemenConnected and environment.firemenConnected and not environment.fireTruckNumberSet ? 'block' : 'collapse'}" >
             <h:panelGrid id="ft_nb_panel">
                 <h3>Fire truck number</h3>
                 <h:outputText id="ft_nb_out" value="Set fire truck number to #{environment.fireTruckNumber}" /> <!-- Garde : Maximum autorisé = maximum dans la base ? -->
                 <h:inputHidden id="ft_nb" value="#{environment.fireTruckNumber}" />
                 <p:slider for="ft_nb" display="ft_nb_out" style="width: 400px" displayTemplate="Set fire truck number to {value}" maxValue="${firemenApp.maxFTNumber}" />
-                <h:commandButton value="state_fire_truck_number" action="#{firemenApp.state_fire_truck_number(fire_truck_number.value)}" >
+                <h:commandButton value="state_fire_truck_number" action="#{firemenApp.state_fire_truck_number(environment.fireTruckNumber)}" disabled="#{environment.fireTruckNumber == 0}" >
                     <f:actionListener binding="#{environment.setFireTruckNumberSet(true)}" />
                 </h:commandButton>
             </h:panelGrid>
@@ -26,89 +27,119 @@
         </h:form>
         
         <h:form id="ft_route_form" style="visibility: #{environment.fireTruckNumberSet and not (environment.fireTruckRouteAccepted and environment.policeVehicleRouteAccepted) ? 'block' : 'collapse'}">
-            <h:panelGrid id="ft_route_panel" columns="2">
+            <h:panelGrid id="ft_route_panel" columns="1">
                 <h3>Firemen route</h3>
-                <h:selectOneMenu id="chosen_route" value="#{chosenRoute}" disabled="${environment.fireTruckRouteAccepted}" >
-                    <f:selectItems value="#{firemenApp.getRoutes()}" />
-                </h:selectOneMenu>
-                <h:commandButton value="select_firemen_route"  action="#{environment.setFiremenRoute(chosenRoute)}" disabled="${environment.fireTruckRouteAccepted}" >
-                    <f:actionListener binding="#{firemenApp.route_for_fire_trucks(chosenRoute)}" />
-                    <f:ajax execute="chosen_route" render="selfRoute_firemen" />
-                </h:commandButton>
+                
+                <h:panelGrid columns="2" style="border: none">
+                    
+                    <h:selectOneMenu id="chosen_route" value="#{chosenRoute}" disabled="${environment.fireTruckRouteAccepted}" >
+                        <f:selectItems value="#{firemenApp.getRoutes()}" />
+                    </h:selectOneMenu>
+                    <h:commandButton value="select_firemen_route"  action="#{environment.setFiremenRoute(chosenRoute)}" disabled="${environment.fireTruckRouteAccepted}" >
+                        <f:actionListener binding="#{firemenApp.route_for_fire_trucks(chosenRoute)}" />
+                        <f:ajax execute="chosen_route" render="selfRoute_firemen" />
+                    </h:commandButton>
+                    
+                </h:panelGrid>
             
 
-                Your route : <h:outputText id='selfRoute_firemen' value="#{environment.firemenRoute != null ? environment.firemenRoute : ''}" />
+                <h:outputText id='selfRoute_firemen' value="Your route : #{environment.firemenRoute != null ? environment.firemenRoute : ''}" />
 
-                <br />
+                <h:panelGrid id="selfRoute_agree" columns="2" style="border: none">
+                    
+                    <h:commandButton value="Agree about fire truck route" action="#{firemenApp.FSC_agrees_about_fire_truck_route()}"  disabled="${environment.fireTruckRouteAccepted or (environment.firemenRoute == null)}" >
+                        <f:actionListener binding="#{environment.firemenRouteAccepted()}" />
+                    </h:commandButton>
+                    <h:commandButton value="Disagree about fire truck route" action="#{firemenApp.FSC_disagrees_about_fire_truck_route()}" disabled="${environment.firemenRoute == null}" >
+                        <f:actionListener binding="#{environment.firemenRouteRefused()}" />
+                    </h:commandButton>
+                    <p:poll interval="#{1}" update="selfRoute_agree" />
+                    
+                </h:panelGrid>
                 
-                <h:commandButton value="Agree about fire truck route" action="#{firemenApp.FSC_agrees_about_fire_truck_route()}"  disabled="${environment.fireTruckRouteAccepted or (environment.firemenRoute == null)}" >
-                    <f:actionListener binding="#{environment.firemenRouteAccepted()}" />
-                </h:commandButton>
-                <h:commandButton value="Disagree about fire truck route" action="#{firemenApp.FSC_disagrees_about_fire_truck_route()}" disabled="${environment.firemenRoute == null}" >
-                    <f:actionListener binding="#{environment.firemenRouteRefused()}" />
-                </h:commandButton>
 
             </h:panelGrid>
                 
-            <h:panelGrid style="margin-top: 10px" columns="2">                
+            <h:panelGrid id="policeroute" style="margin-top: 10px" columns="1">                
                 
-                <br /><h3>Policemen route : 
-                <h:outputText id="policeroute" value="#{environment.policemenRoute != null and environment.policemenRoute != '' ? environment.policemenRoute : 'Waiting for policemen\'s route'}" />
-                <p:poll interval="${1}" update="policeroute" /></h3> 
+                <h3>Policemen route : #{environment.policemenRoute != null and environment.policemenRoute != '' ? environment.policemenRoute : 'Waiting for policemen\'s route'} </h3>
+                
+                <p:poll interval="${1}" update="policeroute" />
 
-                <br />
+                    <h:panelGrid columns="2" style="border: none">
 
-                <h:commandButton value="Agree about police vehicle route" action="#{firemenApp.FSC_agrees_about_police_vehicle_route()}" disabled="${environment.policeVehicleRouteAccepted or (environment.policemenRoute == null)}" >
-                    <f:actionListener binding="#{environment.policemenRouteAccepted()}" />
-                </h:commandButton>
-                <h:commandButton value="Disagree about police vehicle route" action="#{firemenApp.FSC_disagrees_about_police_vehicle_route()}" disabled="${environment.policemenRoute == null}" >
-                    <f:actionListener binding="#{environment.firemenRouteRefused()}" />
-                </h:commandButton>
-            </h:panelGrid>
-            <p:poll interval="${1}" update="ft_route_form" />
+                        <h:commandButton value="Agree about police vehicle route" action="#{firemenApp.FSC_agrees_about_police_vehicle_route()}" disabled="${environment.policeVehicleRouteAccepted or (environment.policemenRoute == null)}" >
+                            <f:actionListener binding="#{environment.policemenRouteAccepted()}" />
+                        </h:commandButton>
+                        <h:commandButton value="Disagree about police vehicle route" action="#{firemenApp.FSC_disagrees_about_police_vehicle_route()}" disabled="${environment.policemenRoute == null}" >
+                            <f:actionListener binding="#{environment.firemenRouteRefused()}" />
+                        </h:commandButton>
+
+                    </h:panelGrid>
+
+                </h:panelGrid>
+            <p:poll interval="${1}" update="policeroute" />
         </h:form>
         
         <h:form id="ft_dispatching_form" style="visibility: #{environment.fireTruckRouteAccepted and environment.policeVehicleRouteAccepted ? 'block' : 'collapse'}">
-            <h:panelGrid id="ft_dispatching_panel" columns="2">
+            <h:panelGrid id="ft_dispatching_panel" columns="1">
                 <h3>Dispatching</h3>
-                <h:selectOneMenu id="dispatched_truck" value="#{truckToDispatch}"  >
-                    <f:selectItems value="#{environment.availableFireTrucks != null ? environment.availableFireTrucks : environment.getAvailableFireTrucks(firemenApp.fireTrucks)}" />
-                </h:selectOneMenu>
-                <h:commandButton value="Dispatch" action="#{firemenApp.fire_truck_dispatched(truckToDispatch)}" >
-                    <f:actionListener binding="#{environment.removeInAvalableFireTrucks(truckToDispatch)}" />
-                    <f:actionListener binding="#{environment.addInDispatchedFireTrucks(truckToDispatch)}" />
-                </h:commandButton>
+                
+                <h:panelGrid columns="2" style="border: none">
+                
+                    <h:selectOneMenu id="dispatched_truck" value="#{truckToDispatch}"  >
+                        <f:selectItems value="#{environment.availableFireTrucks != null ? environment.availableFireTrucks : environment.getAvailableFireTrucks(firemenApp.fireTrucks)}" />
+                    </h:selectOneMenu>
+                    <h:commandButton value="Dispatch" action="#{testApplication.fire_truck_dispatched(truckToDispatch)}" >
+                        <f:actionListener binding="#{environment.removeInAvalableFireTrucks(truckToDispatch)}" />
+                        <f:actionListener binding="#{environment.addInDispatchedFireTrucks(truckToDispatch)}" />
+                        <f:actionListener binding="#{environment.addTruckState(truckToDispatch, 'none')}" />
+                    </h:commandButton>
+                    
+                </h:panelGrid>
+                    
             </h:panelGrid>
             
             <h:panelGrid id="ft_dispatched_panel" style="margin-top: 20px">
                 <h3>Dispatched fire trucks</h3>
                 <br />
                 <c:forEach items="#{environment.dispatchedFireTrucks}" var="ft" >
-                    <h:panelGrid columns="4">
+                    <h:panelGrid id="#{ft}" columns="4" style="background-color:#{environment.truckStates.get(ft)}; border: none ">
                         <h:panelGroup>
                             <h:outputText value="#{ft}" />
-                            <h:commandButton value="Arrived" action="#{firemenApp.fire_truck_arrived(ft.toString())}"/>
+                            <h:commandButton value="Arrived" action="#{firemenApp.fire_truck_arrived(ft.toString())}" disabled="#{environment.truckStates.get(ft) == 'green' or environment.truckStates.get(ft) == 'red'}">
+                                <f:actionListener binding="#{environment.setFireTruckState(ft, 'green')}" />
+                            </h:commandButton>
                             <h:panelGroup>
-                                <h:commandButton value="Breakdown" action="#{firemenApp.fire_truck_breakdown(ft, (truckToReplace != null ? truckToReplace : null))}" >
+                                <h:commandButton value="Breakdown" action="#{firemenApp.fire_truck_breakdown(ft, truckToReplace)}" disabled="#{environment.truckStates.get(ft) == 'green' or environment.truckStates.get(ft) == 'red'}">
                                     <f:actionListener binding="#{environment.removeInAvalableFireTrucks(truckToReplace)}" />
-                                    <f:actionListener binding="#{environment.addInDispatchedFireTrucks(truckToReplace)}" />
+                                    <f:actionListener binding="#{truckToReplace != null ? environment.addInDispatchedFireTrucks(truckToReplace) : null}" />
+                                    <f:actionListener binding="#{truckToReplace != null ? environment.addTruckState(truckToReplace, 'none') : null}" />
+                                    <f:actionListener binding="#{environment.setFireTruckState(ft, 'red')}" />
                                 </h:commandButton>
-                                <h:selectOneMenu id="truck_to_replace" value="#{truckToReplace}"  >
-                                    <f:selectItem value="#{null}" />
+                                <h:selectOneMenu id="truck_to_replace" value="#{truckToReplace}" disabled="#{environment.truckStates.get(ft) == 'green' or environment.truckStates.get(ft) == 'red'}" >
+                                    <f:selectItem value="#{null}" itemValue="#{null}" itemLabel="Select" />
                                     <f:selectItems value="#{environment.availableFireTrucks != null ? environment.availableFireTrucks : environment.getAvailableFireTrucks(firemenApp.fireTrucks)}" />
                                 </h:selectOneMenu>
                             </h:panelGroup>
-                            <h:commandButton value="Blocked" action="#{firemenApp.fire_truck_blocked(ft.toString())}"/>
+                            <h:commandButton value="Blocked" action="#{firemenApp.fire_truck_blocked(ft.toString())}" disabled="#{environment.truckStates.get(ft) == 'green' or environment.truckStates.get(ft) == 'red'}">
+                                <f:actionListener binding="#{environment.setFireTruckState(ft, 'orange')}" />
+                            </h:commandButton>
                         </h:panelGroup>
                     </h:panelGrid>
-                    <br />
                 </c:forEach>
             </h:panelGrid>
             
             <!--<p:poll interval="${1}" update="ft_dispatched_panel" />-->
         </h:form>
         
-           
+        <h:form id="reset">
+            <h:commandButton value="reset" action="/index">
+                <f:actionListener binding="#{firemenApp.reset()}" />
+                <f:actionListener binding="#{environment.reset()}" />
+            </h:commandButton>
+        </h:form>
+        </h:panelGrid>
         
         
     </h:body>

@@ -3,30 +3,122 @@
 <html xmlns="http://www.w3.org/1999/xhtml"
       xmlns:h="http://xmlns.jcp.org/jsf/html"
       xmlns:f="http://java.sun.com/jsf/core"
+      xmlns:c="http://xmlns.jcp.org/jsp/jstl/core"
       xmlns:p="http://primefaces.org/ui" >
     
     <h:head>
         <title>Policemen</title>
+        <link type="text/css" rel="stylesheet" href="../CSS/WebApp.css" />
     </h:head>
     <h:body>
-        <h2>Policemen</h2>
-        <h:form>
-            <h:outputText id="pv_nb_out" value="#{environment.policeVehicleNumber}"/> <!-- Garde : Maximum autorisé = maximum dans la base ? -->
-            <h:inputHidden id="pv_nb" value="#{environment.policeVehicleNumber}" />
-            <p:slider for="pv_nb" display="pv_nb_out" style="width: 200px" displayTemplate="Set police vehicle number to {value}" maxValue="${policemenApp.maxPVNumber}" />
-            <h:commandButton value="state_police_vehicle_number" action="#{policemenApp.state_police_vehicle_number(police_vehicle_number.value)}"/>
-        </h:form> 
-        <h:form>
-            <h3>Policemen route</h3>
-            <h:selectOneMenu value="#{chosenRoute}">
-                <f:selectItems value="#{policemenApp.getRoutes()}" />
-            </h:selectOneMenu>
-            <h:commandButton value="select_policemen_route" action="#{environment.setPolicemenRoute(chosenRoute)}" />
         
-            <br />Firemen route : 
-            <h:outputText id="firemenroute" value="#{environment.firemenRoute != null ? environment.firemenRoute : 'Waiting for firemen\'s route'}" />
-            <p:poll interval="${1}" update="firemenroute" />
+        <h2>Policemen</h2>
+        
+        <h:form id="pv_nb_form" style="visibility: #{environment.policemenConnected and environment.firemenConnected and not environment.policeVehicleNumberSet ? 'block' : 'collapse'}" >
+            <h:panelGrid id="pv_nb_panel">
+                <h3>Police vehicle number</h3>
+                <h:outputText id="pv_nb_out" value="Set police vehicle number to #{environment.policeVehicleNumber}"/> <!-- Garde : Maximum autorisé = maximum dans la base ? -->
+                <h:inputHidden id="pv_nb" value="#{environment.policeVehicleNumber}" />
+                <p:slider for="pv_nb" display="pv_nb_out" style="width: 200px" displayTemplate="Set police vehicle number to {value}" maxValue="${policemenApp.maxPVNumber}" />
+                <h:commandButton value="state_police_vehicle_number" action="#{policemenApp.state_police_vehicle_number(environment.policeVehicleNumber)}" disabled="#{environment.policeVehicleNumber == 0}" >
+                    <f:actionListener binding="#{environment.setPoliceVehicleNumberSet(true)}" />
+                </h:commandButton>
+            </h:panelGrid>
+            <p:poll interval="1" update="pv_nb_form" />
+        </h:form> 
+        
+        <h:form id="pv_route_form" style="visibility: #{environment.policeVehicleNumberSet and not (environment.fireTruckRouteAccepted and environment.policeVehicleRouteAccepted) ? 'block' : 'collapse'}">
+            <h:panelGrid id="pv_route_panel" columns="1">
+                <h:panelGroup><h3>Policemen route</h3></h:panelGroup>
+                
+                <h:panelGrid columns="2">
+                    <h:selectOneMenu id="chosen_route" value="#{chosenRoute}">
+                        <f:selectItems value="#{policemenApp.getRoutes()}" />
+                    </h:selectOneMenu>
+                    <h:commandButton value="select_policemen_route" action="#{environment.setPolicemenRoute(chosenRoute)}" >
+                        <f:actionListener binding="#{policemenApp.route_for_police_vehicles(chosenRoute)}" />
+                        <f:ajax execute="chosen_route" render="selfRoute_policemen" />
+                    </h:commandButton>
+                </h:panelGrid>
+        
+
+                <h:outputText id='selfRoute_policemen' value="Your route : #{environment.policemenRoute != null ? environment.policemenRoute : ''}" />
+                
+            </h:panelGrid>
+            
+            <h:panelGrid id="firemen_Route" style="margin-top: 10px" columns="1">  
+                
+                <h3> Firemen route : #{environment.firemenRoute != null ? environment.firemenRoute : 'Waiting for firemen\'s route'} </h3>
+                <h:outputText id="firemenroute" value="Firemen route :#{environment.firemenRoute != null ? environment.firemenRoute : 'Waiting for firemen\'s route'} " />
+                <p:poll interval="${1}" update="firemenroute" />
+
+            </h:panelGrid>
+            <p:poll interval="${1}" update="firemen_Route" stop="#{environment.fireTruckRouteAccepted}" />
+            <h:inputHidden id="poll_route">
+                <p:poll interval="${1}" update="pv_route_form" stop="#{not environment.policeVehicleRouteAccepted or (environment.policeVehicleRouteAccepted and environment.fireTruckRouteAccepted)}" />            
+            </h:inputHidden>
+            <p:poll interval="#{1}" update="poll_route"/>
         </h:form>
+            
+            <h:form id="pv_dispatching_form" style="visibility: #{environment.fireTruckRouteAccepted and environment.policeVehicleRouteAccepted ? 'block' : 'collapse'}">   
+            <p:poll interval="${1}" update="pv_dispatching_form" />
+            <h:panelGrid id="pv_dispatching_panel" columns="1">
+                <h3>Dispatching</h3>
+                
+                <h:panelGrid columns="2" style="border: none">
+                
+                    <h:selectOneMenu id="dispatched_policeVehicle" value="#{vehicleToDispatch}"  >
+                        <f:selectItems value="#{environment.availablePoliceVehicles != null ? environment.availablePoliceVehicles : environment.getAvailablePoliceVehicles(policemenApp.policeVehicles)}" />
+                    </h:selectOneMenu>
+                    <h:commandButton value="Dispatch" action="#{policemenApp.police_vehicle_dispatched(vehicleToDispatch)}" >
+                        <f:actionListener binding="#{environment.removeInAvailablePoliceVehicles(vehicleToDispatch)}" />
+                        <f:actionListener binding="#{environment.addInDispatchedPoliceVehicles(vehicleToDispatch)}" />
+                        <f:actionListener binding="#{environment.addPoliceVehicleState(vehicleToDispatch, 'none')}" />
+                    </h:commandButton>
+                    
+                </h:panelGrid>
+                    
+            </h:panelGrid>
+            
+            <h:panelGrid id="pv_dispatched_panel" style="margin-top: 20px">
+                <h3>Dispatched police vehicles</h3>
+                <br />
+                <c:forEach items="#{environment.dispatchedPoliceVehicles}" var="pv" >
+                    <h:panelGrid id="#{pv}" columns="4" style="background-color:#{environment.policeVehicleStates.get(pv)}; border: none ">
+                        <h:panelGroup>
+                            <h:outputText value="#{pv}" />
+                            <h:commandButton value="Arrived" action="#{policemenApp.police_vehicle_arrived(pv.toString())}" disabled="#{environment.policeVehicleStates.get(pv) == 'green' or environment.policeVehicleStates.get(pv) == 'red'}">
+                                <f:actionListener binding="#{environment.setPoliceVehicleState(pv, 'green')}" />
+                            </h:commandButton>
+                            <h:panelGroup>
+                                <h:commandButton value="Breakdown" action="#{policemenApp.police_vehicle_breakdown(pv, vehicleToReplace)}" disabled="#{environment.policeVehicleStates.get(pv) == 'green' or environment.policeVehicleStates.get(pv) == 'red'}">
+                                    <f:actionListener binding="#{environment.removeInAvailablePoliceVehicles(vehicleToReplace)}" />
+                                    <f:actionListener binding="#{vehicleToReplace != null ? environment.addInDispatchedPoliceVehicles(vehicleToReplace) : null}" />
+                                    <f:actionListener binding="#{vehicleToReplace != null ? environment.addPoliceVehicleState(vehicleToReplace, 'none') : null}" />
+                                    <f:actionListener binding="#{environment.setPoliceVehicleState(pv, 'red')}" />
+                                </h:commandButton>
+                                <h:selectOneMenu id="truck_to_replace" value="#{vehicleToReplace}" disabled="#{environment.policeVehicleStates.get(pv) == 'green' or environment.policeVehicleStates.get(pv) == 'red'}" >
+                                    <f:selectItem value="#{null}" itemValue="#{null}" itemLabel="Select" />
+                                    <f:selectItems value="#{environment.availablePoliceVehicles != null ? environment.availablePoliceVehicles : environment.getAvailablePoliceVehicles(policemenApp.policeVehicles)}" />
+                                </h:selectOneMenu>
+                            </h:panelGroup>
+                            <h:commandButton value="Blocked" action="#{policemenApp.police_vehicle_blocked(pv.toString())}" disabled="#{environment.policeVehicleStates.get(pv) == 'green' or environment.policeVehicleStates.get(pv) == 'red'}">
+                                <f:actionListener binding="#{environment.setPoliceVehicleState(pv, 'orange')}" />
+                            </h:commandButton>
+                        </h:panelGroup>
+                    </h:panelGrid>
+                </c:forEach>
+            </h:panelGrid>
+            
+        </h:form> 
+        
+        <h:form id="reset">
+            <h:commandButton value="reset" action="/index">
+                <f:actionListener binding="#{policemenApp.reset()}" />
+                <f:actionListener binding="#{environment.reset()}" />
+            </h:commandButton>
+        </h:form>
+        
         
     </h:body>
 </html>

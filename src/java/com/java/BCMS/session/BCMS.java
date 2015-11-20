@@ -446,6 +446,8 @@ public class BCMS extends Timer_monitor implements FSC_Remote, PSC_Remote {
         _bCMS_state_machine.fires(_State_fire_truck_number, _Number_of_police_vehicle_defined, _Route_plan_development, true, this, "set_number_of_fire_truck_required", new Object[]{number_of_fire_truck_required});
         _bCMS_state_machine.run_to_completion(_State_fire_truck_number);
         
+        
+        System.out.println("============== FIRE TRUCK NUMBER " + number_of_fire_truck_required + " ==============");
         event.insertEvent(_State_fire_truck_number, _bCMS_state_machine.current_state(), _bcmsSession);
     }
 
@@ -540,6 +542,8 @@ public class BCMS extends Timer_monitor implements FSC_Remote, PSC_Remote {
         _bCMS_state_machine.fires(_Fire_truck_dispatched, _All_police_vehicles_dispatched, _All_police_vehicles_dispatched, this, "fire_truck_dispatched_less_than_number_of_fire_truck_required", null, this, "enough_fire_trucks_dispatched", null, AbstractStatechart.Reentrance);
         _bCMS_state_machine.run_to_completion(_Fire_truck_dispatched);
     
+        
+        System.out.println("============== FIRE TRUCK DISPATCHED " + fire_truck + " ==============");
         insertFireTruck(fire_truck);
         event.insertEvent(_Fire_truck_dispatched, _bCMS_state_machine.current_state(), _bcmsSession);
     }

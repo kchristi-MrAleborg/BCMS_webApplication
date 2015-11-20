@@ -131,6 +131,7 @@ public class TestApplication {
              * 'completion' that is sent internally, arrives before what
              * follows:
              */
+            
 
             fsc_bCMS.fire_truck_dispatched("FT1");
             Thread.sleep(100);
@@ -162,7 +163,7 @@ public class TestApplication {
              * are effectively processed:
              */
             Thread.sleep(100);
-            psc_bCMS.reset();
+            fsc_bCMS.reset();
             //bCMS.stop();
         } catch (Throwable t) {
             t.printStackTrace();
