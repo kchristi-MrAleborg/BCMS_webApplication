@@ -110,6 +110,7 @@
                             <h:commandButton value="Arrived" action="#{firemenApp.fire_truck_arrived(ft.toString())}" disabled="#{environment.truckStates.get(ft) == 'green' or environment.truckStates.get(ft) == 'red'}">
                                 <f:actionListener binding="#{environment.setFireTruckState(ft, 'green')}" />
                             </h:commandButton>
+                            <!-- POLL? -->
                             <h:panelGroup>
                                 <h:commandButton value="Breakdown" action="#{firemenApp.fire_truck_breakdown(ft, truckToReplace)}" disabled="#{environment.truckStates.get(ft) == 'green' or environment.truckStates.get(ft) == 'red'}">
                                     <f:actionListener binding="#{environment.removeInAvalableFireTrucks(truckToReplace)}" />
